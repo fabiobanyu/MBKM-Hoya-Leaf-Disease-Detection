@@ -1,0 +1,75 @@
+{
+  "Hoya Macrophylla": {
+    "precision": 0.96875,
+    "recall": 0.9117647058823529,
+    "f1-score": 0.9393939393939394,
+    "support": 34.0
+  },
+  "Hoya Wayeti": {
+    "precision": 0.84375,
+    "recall": 0.9310344827586207,
+    "f1-score": 0.8852459016393442,
+    "support": 29.0
+  },
+  "Hoya australis": {
+    "precision": 0.8947368421052632,
+    "recall": 0.9444444444444444,
+    "f1-score": 0.918918918918919,
+    "support": 36.0
+  },
+  "Hoya callistophylla": {
+    "precision": 0.9130434782608695,
+    "recall": 0.84,
+    "f1-score": 0.875,
+    "support": 25.0
+  },
+  "Hoya finlaysonii": {
+    "precision": 0.7333333333333333,
+    "recall": 0.9166666666666666,
+    "f1-score": 0.8148148148148148,
+    "support": 36.0
+  },
+  "Hoya imperialis": {
+    "precision": 0.9047619047619048,
+    "recall": 0.76,
+    "f1-score": 0.8260869565217391,
+    "support": 25.0
+  },
+  "Hoya kerrii": {
+    "precision": 0.8888888888888888,
+    "recall": 0.9523809523809523,
+    "f1-score": 0.9195402298850575,
+    "support": 42.0
+  },
+  "Hoya lacunosa": {
+    "precision": 0.8541666666666666,
+    "recall": 0.803921568627451,
+    "f1-score": 0.8282828282828283,
+    "support": 51.0
+  },
+  "Hoya pubicalyx": {
+    "precision": 0.8333333333333334,
+    "recall": 0.5,
+    "f1-score": 0.625,
+    "support": 20.0
+  },
+  "hoya carnosa": {
+    "precision": 0.8648648648648649,
+    "recall": 0.9142857142857143,
+    "f1-score": 0.8888888888888888,
+    "support": 35.0
+  },
+  "accuracy": 0.8648648648648649,
+  "macro avg": {
+    "precision": 0.8699629312215122,
+    "recall": 0.8474498535046202,
+    "f1-score": 0.8521172478345532,
+    "support": 333.0
+  },
+  "weighted avg": {
+    "precision": 0.8687527962811685,
+    "recall": 0.8648648648648649,
+    "f1-score": 0.8619439592285302,
+    "support": 333.0
+  }
+}

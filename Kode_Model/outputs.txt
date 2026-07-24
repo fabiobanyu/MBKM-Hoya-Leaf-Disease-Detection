@@ -1,0 +1,753 @@
+
+--- D:\KP\Kode\densenet-121-grad-cam-renew.ipynb ---
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.8/7.8 MB 54.8 MB/s eta 0:00:00
+GPU          : Tesla T4
+CUDA Version : 12.8
+VRAM         : 14.56 GB
+
+Device : cuda
+
+===== Library Version =====
+NumPy  : 2.0.2
+Torch  : 2.10.0+cu128
+TVision: 0.25.0+cu128
+Konfigurasi siap.
+Kelas dipakai (5): ['Sehat', 'Bercak Cokelat', 'Bercak Putih', 'Daun Layu', 'Bercak Bintik Hitam']
+Kelas dihapus: ['Bercak Bintik Hitam Putih']
+AdaptiveSharpen, CLAHE & DiscreteRotation siap.
+Total gambar: 2214 | Kelas: 5 | Spesies: 10
+Versi background putih (manual): 4 | Versi natural: 2210
+--- Distribusi Penyakit - Seluruh Data ---
+  Sehat                 : 957
+  Bercak Cokelat        : 280
+  Bercak Putih          : 328
+  Daun Layu             : 348
+  Bercak Bintik Hitam   : 301
+<Figure size 800x400 with 1 Axes>--- Distribusi Spesies - Seluruh Data ---
+  Hoya Macrophylla      : 218
+  Hoya Wayeti           : 182
+  Hoya australis        : 236
+  Hoya callistophylla   : 172
+  Hoya finlaysonii      : 237
+  Hoya imperialis       : 165
+  Hoya kerrii           : 289
+  Hoya lacunosa         : 346
+  Hoya pubicalyx        : 139
+  hoya carnosa          : 230
+<Figure size 800x400 with 1 Axes>Sebelum filter -> Train: 1551 | Val: 330 | Test: 333
+Setelah filter  -> Train: 1551 (natural+putih) | Val: 329 (natural) | Test: 333 (natural)
+--- Distribusi - TRAIN Penyakit ---
+  Sehat                 : 670
+  Bercak Cokelat        : 196
+  Bercak Putih          : 231
+  Daun Layu             : 244
+  Bercak Bintik Hitam   : 210
+<Figure size 800x400 with 1 Axes>--- Distribusi - VAL Penyakit ---
+  Sehat                 : 144
+  Bercak Cokelat        : 41
+  Bercak Putih          : 47
+  Daun Layu             : 53
+  Bercak Bintik Hitam   : 44
+<Figure size 800x400 with 1 Axes>--- Distribusi - TEST Penyakit ---
+  Sehat                 : 143
+  Bercak Cokelat        : 43
+  Bercak Putih          : 49
+  Daun Layu             : 51
+  Bercak Bintik Hitam   : 47
+<Figure size 800x400 with 1 Axes>--- Distribusi - TRAIN Spesies ---
+  Hoya Macrophylla      : 152
+  Hoya Wayeti           : 127
+  Hoya australis        : 166
+  Hoya callistophylla   : 121
+  Hoya finlaysonii      : 165
+  Hoya imperialis       : 115
+  Hoya kerrii           : 203
+  Hoya lacunosa         : 243
+  Hoya pubicalyx        : 98
+  hoya carnosa          : 161
+<Figure size 800x400 with 1 Axes>--- Distribusi - VAL Spesies ---
+  Hoya Macrophylla      : 32
+  Hoya Wayeti           : 26
+  Hoya australis        : 34
+  Hoya callistophylla   : 25
+  Hoya finlaysonii      : 36
+  Hoya imperialis       : 25
+  Hoya kerrii           : 44
+  Hoya lacunosa         : 52
+  Hoya pubicalyx        : 21
+  hoya carnosa          : 34
+<Figure size 800x400 with 1 Axes>--- Distribusi - TEST Spesies ---
+  Hoya Macrophylla      : 34
+  Hoya Wayeti           : 29
+  Hoya australis        : 36
+  Hoya callistophylla   : 25
+  Hoya finlaysonii      : 36
+  Hoya imperialis       : 25
+  Hoya kerrii           : 42
+  Hoya lacunosa         : 51
+  Hoya pubicalyx        : 20
+  hoya carnosa          : 35
+<Figure size 800x400 with 1 Axes>Pipeline transform siap.
+WeightedRandomSampler GABUNGAN (disease x species) aktif.
+{'train': 3350, 'val': 329, 'test': 333}
+<Figure size 800x2000 with 10 Axes>Downloading: "https://download.pytorch.org/models/densenet121-a639ec97.pth" to /root/.cache/torch/hub/checkpoints/densenet121-a639ec97.pth
+100%|██████████| 30.8M/30.8M [00:00<00:00, 129MB/s]
+Backbone: densenet121 | Param dilatih (head_only): 396,943 / 7,350,799
+Loss ganda & optimizer siap.
+[Unfreeze] Epoch 1: stage='head_only' -> 396,943 param trainable
+Epoch 1/60
+------------------------------
+Train Loss: 2.0115  F1-Disease: 0.5187  F1-Species: 0.5364
+Val   Loss: 1.4848  F1-Disease: 0.6179  F1-Species: 0.6410
+  -> Model terbaik baru (Skor gabungan: 0.6248)
+
+Epoch 2/60
+------------------------------
+Train Loss: 1.6968  F1-Disease: 0.6091  F1-Species: 0.6949
+Val   Loss: 1.4576  F1-Disease: 0.5941  F1-Species: 0.7198
+  -> Model terbaik baru (Skor gabungan: 0.6318)
+
+Epoch 3/60
+------------------------------
+Train Loss: 1.6003  F1-Disease: 0.6102  F1-Species: 0.7145
+Val   Loss: 1.4090  F1-Disease: 0.5790  F1-Species: 0.7222
+
+  [Checkpoint disimpan di epoch 3]
+[Unfreeze] Epoch 4: stage='block4' -> 2,557,071 param trainable
+Epoch 4/60
+------------------------------
+Train Loss: 1.6536  F1-Disease: 0.6405  F1-Species: 0.7344
+Val   Loss: 1.3668  F1-Disease: 0.6112  F1-Species: 0.7320
+  -> Model terbaik baru (Skor gabungan: 0.6475)
+
+Epoch 5/60
+------------------------------
+Train Loss: 1.5775  F1-Disease: 0.6576  F1-Species: 0.7354
+Val   Loss: 1.3718  F1-Disease: 0.6308  F1-Species: 0.7101
+  -> Model terbaik baru (Skor gabungan: 0.6546)
+
+Epoch 6/60
+------------------------------
+Train Loss: 1.5740  F1-Disease: 0.6312  F1-Species: 0.7479
+Val   Loss: 1.3334  F1-Disease: 0.6574  F1-Species: 0.7492
+  -> Model terbaik baru (Skor gabungan: 0.6849)
+
+  [Checkpoint disimpan di epoch 6]
+Epoch 7/60
+------------------------------
+Train Loss: 1.5507  F1-Disease: 0.6431  F1-Species: 0.7362
+Val   Loss: 1.3130  F1-Disease: 0.6579  F1-Species: 0.7116
+
+Epoch 8/60
+------------------------------
+Train Loss: 1.5986  F1-Disease: 0.6425  F1-Species: 0.7486
+Val   Loss: 1.3749  F1-Disease: 0.6396  F1-Species: 0.7125
+
+Epoch 9/60
+------------------------------
+Train Loss: 1.5891  F1-Disease: 0.6517  F1-Species: 0.7560
+Val   Loss: 1.3675  F1-Disease: 0.6425  F1-Species: 0.7191
+
+  [Checkpoint disimpan di epoch 9]
+Epoch 10/60
+------------------------------
+Train Loss: 1.5386  F1-Disease: 0.6452  F1-Species: 0.7448
+Val   Loss: 1.3316  F1-Disease: 0.6364  F1-Species: 0.7335
+
+[Unfreeze] Epoch 11: stage='block3_4' -> 5,921,167 param trainable
+Epoch 11/60
+------------------------------
+Train Loss: 1.5082  F1-Disease: 0.6646  F1-Species: 0.7501
+Val   Loss: 1.3081  F1-Disease: 0.6317  F1-Species: 0.7352
+
+Epoch 12/60
+------------------------------
+Train Loss: 1.5906  F1-Disease: 0.6536  F1-Species: 0.7576
+Val   Loss: 1.3370  F1-Disease: 0.6433  F1-Species: 0.7644
+
+  [Checkpoint disimpan di epoch 12]
+Epoch 13/60
+------------------------------
+Train Loss: 1.4186  F1-Disease: 0.6607  F1-Species: 0.7634
+Val   Loss: 1.2853  F1-Disease: 0.6112  F1-Species: 0.7654
+
+Epoch 14/60
+------------------------------
+Train Loss: 1.5375  F1-Disease: 0.6552  F1-Species: 0.7662
+Val   Loss: 1.2975  F1-Disease: 0.6458  F1-Species: 0.7769
+  -> Model terbaik baru (Skor gabungan: 0.6851)
+
+Epoch 15/60
+------------------------------
+Train Loss: 1.4923  F1-Disease: 0.6507  F1-Species: 0.7573
+Val   Loss: 1.2731  F1-Disease: 0.6616  F1-Species: 0.7715
+  -> Model terbaik baru (Skor gabungan: 0.6946)
+
+  [Checkpoint disimpan di epoch 15]
+Epoch 16/60
+------------------------------
+Train Loss: 1.4351  F1-Disease: 0.6670  F1-Species: 0.7659
+Val   Loss: 1.3486  F1-Disease: 0.6348  F1-Species: 0.7757
+
+Epoch 17/60
+------------------------------
+Train Loss: 1.5922  F1-Disease: 0.6664  F1-Species: 0.7617
+Val   Loss: 1.2983  F1-Disease: 0.6311  F1-Species: 0.7716
+
+Epoch 18/60
+------------------------------
+Train Loss: 1.4198  F1-Disease: 0.6677  F1-Species: 0.7527
+Val   Loss: 1.2905  F1-Disease: 0.6606  F1-Species: 0.7597
+
+  [Checkpoint disimpan di epoch 18]
+Epoch 19/60
+------------------------------
+Train Loss: 1.4452  F1-Disease: 0.6776  F1-Species: 0.7774
+Val   Loss: 1.3145  F1-Disease: 0.6447  F1-Species: 0.7443
+
+Epoch 20/60
+------------------------------
+Train Loss: 1.4101  F1-Disease: 0.6918  F1-Species: 0.7932
+Val   Loss: 1.2771  F1-Disease: 0.6348  F1-Species: 0.7679
+
+Epoch 21/60
+------------------------------
+Train Loss: 1.4585  F1-Disease: 0.7008  F1-Species: 0.7869
+Val   Loss: 1.2543  F1-Disease: 0.6533  F1-Species: 0.7773
+
+  [Checkpoint disimpan di epoch 21]
+Epoch 22/60
+------------------------------
+Train Loss: 1.3796  F1-Disease: 0.7031  F1-Species: 0.7893
+Val   Loss: 1.2496  F1-Disease: 0.6697  F1-Species: 0.7747
+  -> Model terbaik baru (Skor gabungan: 0.7012)
+
+Epoch 23/60
+------------------------------
+Train Loss: 1.3728  F1-Disease: 0.7001  F1-Species: 0.7954
+Val   Loss: 1.2450  F1-Disease: 0.6607  F1-Species: 0.7731
+
+Epoch 24/60
+------------------------------
+Train Loss: 1.3567  F1-Disease: 0.7167  F1-Species: 0.7800
+Val   Loss: 1.2427  F1-Disease: 0.6604  F1-Species: 0.7936
+
+  [Checkpoint disimpan di epoch 24]
+Epoch 25/60
+------------------------------
+Train Loss: 1.3218  F1-Disease: 0.7075  F1-Species: 0.7984
+Val   Loss: 1.2342  F1-Disease: 0.6606  F1-Species: 0.7729
+
+Epoch 26/60
+------------------------------
+Train Loss: 1.3455  F1-Disease: 0.7209  F1-Species: 0.8016
+Val   Loss: 1.2589  F1-Disease: 0.6474  F1-Species: 0.7670
+
+Epoch 27/60
+------------------------------
+Train Loss: 1.3972  F1-Disease: 0.6935  F1-Species: 0.8009
+Val   Loss: 1.2058  F1-Disease: 0.6944  F1-Species: 0.7878
+  -> Model terbaik baru (Skor gabungan: 0.7224)
+
+  [Checkpoint disimpan di epoch 27]
+Epoch 28/60
+------------------------------
+Train Loss: 1.3335  F1-Disease: 0.7044  F1-Species: 0.8008
+Val   Loss: 1.2116  F1-Disease: 0.6664  F1-Species: 0.7888
+
+Epoch 29/60
+------------------------------
+Train Loss: 1.3754  F1-Disease: 0.7138  F1-Species: 0.8037
+Val   Loss: 1.2345  F1-Disease: 0.6530  F1-Species: 0.7668
+
+Epoch 30/60
+------------------------------
+Train Loss: 1.2652  F1-Disease: 0.7243  F1-Species: 0.8099
+Val   Loss: 1.1816  F1-Disease: 0.6721  F1-Species: 0.7906
+
+  [Checkpoint disimpan di epoch 30]
+Epoch 31/60
+------------------------------
+Train Loss: 1.3415  F1-Disease: 0.7175  F1-Species: 0.8089
+Val   Loss: 1.1700  F1-Disease: 0.6577  F1-Species: 0.7741
+
+Epoch 32/60
+------------------------------
+Train Loss: 1.4011  F1-Disease: 0.7288  F1-Species: 0.8012
+Val   Loss: 1.2595  F1-Disease: 0.6519  F1-Species: 0.7864
+
+Epoch 33/60
+------------------------------
+Train Loss: 1.3127  F1-Disease: 0.7364  F1-Species: 0.8067
+Val   Loss: 1.1865  F1-Disease: 0.6706  F1-Species: 0.7712
+
+  [Checkpoint disimpan di epoch 33]
+Epoch 34/60
+------------------------------
+Train Loss: 1.3327  F1-Disease: 0.7413  F1-Species: 0.8033
+Val   Loss: 1.2353  F1-Disease: 0.6497  F1-Species: 0.7590
+
+Epoch 35/60
+------------------------------
+Train Loss: 1.3001  F1-Disease: 0.7370  F1-Species: 0.8098
+Val   Loss: 1.2143  F1-Disease: 0.6694  F1-Species: 0.7889
+
+Epoch 36/60
+------------------------------
+Train Loss: 1.2962  F1-Disease: 0.7268  F1-Species: 0.8100
+Val   Loss: 1.1794  F1-Disease: 0.6819  F1-Species: 0.7745
+
+  [Checkpoint disimpan di epoch 36]
+Epoch 37/60
+------------------------------
+Train Loss: 1.2881  F1-Disease: 0.7501  F1-Species: 0.8179
+Val   Loss: 1.1636  F1-Disease: 0.6709  F1-Species: 0.7830
+
+Epoch 38/60
+------------------------------
+Train Loss: 1.3283  F1-Disease: 0.7437  F1-Species: 0.8204
+Val   Loss: 1.1862  F1-Disease: 0.6584  F1-Species: 0.7748
+
+Epoch 39/60
+------------------------------
+Train Loss: 1.3145  F1-Disease: 0.7425  F1-Species: 0.8200
+Val   Loss: 1.1605  F1-Disease: 0.6682  F1-Species: 0.7850
+
+  [Checkpoint disimpan di epoch 39]
+Epoch 40/60
+------------------------------
+Train Loss: 1.2621  F1-Disease: 0.7736  F1-Species: 0.7978
+Val   Loss: 1.1541  F1-Disease: 0.6870  F1-Species: 0.7901
+
+Epoch 41/60
+------------------------------
+Train Loss: 1.2015  F1-Disease: 0.7469  F1-Species: 0.8352
+Val   Loss: 1.1729  F1-Disease: 0.6774  F1-Species: 0.7983
+
+Epoch 42/60
+------------------------------
+Train Loss: 1.2671  F1-Disease: 0.7605  F1-Species: 0.8101
+Val   Loss: 1.1489  F1-Disease: 0.6708  F1-Species: 0.7919
+
+  [Checkpoint disimpan di epoch 42]
+Early stopping di epoch 42
+
+Training selesai dalam 35m 36s
+Best Combined Score: 0.7224 (F1-Disease saat itu: 0.6944)
+
+=== Fine-tuning SWA (6 epoch tambahan) ===
+  SWA epoch 1/6 selesai
+  SWA epoch 2/6 selesai
+  SWA epoch 3/6 selesai
+  SWA epoch 4/6 selesai
+  SWA epoch 5/6 selesai
+  SWA epoch 6/6 selesai
+
+Model biasa -> Skor: 0.7727 (D:0.7534, S:0.8177)
+SWA model   -> Skor: 0.7493 (D:0.7247, S:0.8068)
+-> Model biasa masih lebih baik, SWA TIDAK dipakai.
+<Figure size 1400x500 with 2 Axes>Epoch terbaik: 27 | F1-Disease: 0.6944 | F1-Species: 0.7878
+=== CLASSIFICATION REPORT — PENYAKIT ===
+                     precision    recall  f1-score   support
+
+              Sehat       0.93      0.94      0.93       143
+     Bercak Cokelat       0.69      0.72      0.70        43
+       Bercak Putih       0.70      0.67      0.69        49
+          Daun Layu       0.67      0.76      0.72        51
+Bercak Bintik Hitam       0.82      0.68      0.74        47
+
+           accuracy                           0.81       333
+          macro avg       0.76      0.76      0.76       333
+       weighted avg       0.81      0.81      0.81       333
+
+
+=== CLASSIFICATION REPORT — SPESIES ===
+                     precision    recall  f1-score   support
+
+   Hoya Macrophylla       0.87      0.97      0.92        34
+        Hoya Wayeti       0.91      1.00      0.95        29
+     Hoya australis       0.86      0.86      0.86        36
+Hoya callistophylla       0.76      0.88      0.81        25
+   Hoya finlaysonii       0.83      0.81      0.82        36
+    Hoya imperialis       0.84      0.84      0.84        25
+        Hoya kerrii       0.91      0.98      0.94        42
+      Hoya lacunosa       1.00      0.76      0.87        51
+     Hoya pubicalyx       0.67      0.70      0.68        20
+       hoya carnosa       0.82      0.77      0.79        35
+
+           accuracy                           0.86       333
+          macro avg       0.85      0.86      0.85       333
+       weighted avg       0.86      0.86      0.86       333
+
+<Figure size 800x600 with 2 Axes><Figure size 800x600 with 2 Axes><Figure size 1800x475 with 3 Axes><Figure size 1800x750 with 3 Axes><Figure size 1300x2400 with 18 Axes>Temperature terkalibrasi: -23.044
+{'spesies': {'nama': 'Hoya australis', 'confidence': 70.1}, 'gejala': {'status': 'sehat', 'nama_tampilan': 'Tidak terkendala gejala (sehat)', 'nama_kelas_model': 'Sehat', 'confidence': 21.6, 'top3': [{'nama': 'Sehat', 'confidence': 21.6}, {'nama': 'Daun Layu', 'confidence': 20.3}, {'nama': 'Bercak Putih', 'confidence': 20.1}]}, 'faktor_penyebab': None, 'penanganan': None}
+Semua artefak tersimpan di: /kaggle/working//outputs
+['augmentasi_before_after.png', 'checkpoint_densenet121.pth', 'class_names.json', 'classification_report_disease.json', 'classification_report_species.json', 'cm_disease_densenet121.png', 'cm_species_densenet121.png', 'config.json', 'deployment_meta.json', 'distribusi_penyakit.png', 'distribusi_spesies.png', 'gradcam_densenet121.png', 'hoya_multitask_densenet121_final.pth', 'hoya_multitask_densenet121_traced.pt', 'metrics_penyakit_-_densenet121.png', 'metrics_spesies_-_densenet121.png', 'species_names.json', 'temperature.json', 'training_curves_densenet121.png', 'training_history.json']
+
+--- D:\KP\Kode\resnet-50-grad-cam-renew.ipynb ---
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.8/7.8 MB 94.4 MB/s eta 0:00:00
+GPU          : Tesla T4
+CUDA Version : 12.8
+VRAM         : 14.56 GB
+
+Device : cuda
+
+===== Library Version =====
+NumPy  : 2.0.2
+Torch  : 2.10.0+cu128
+TVision: 0.25.0+cu128
+Konfigurasi siap.
+Kelas dipakai (5): ['Sehat', 'Bercak Cokelat', 'Bercak Putih', 'Daun Layu', 'Bercak Bintik Hitam']
+Kelas dihapus: ['Bercak Bintik Hitam Putih']
+AdaptiveSharpen, CLAHE & DiscreteRotation siap.
+Total gambar: 2214 | Kelas: 5 | Spesies: 10
+Versi background putih (manual): 4 | Versi natural: 2210
+--- Distribusi Penyakit - Seluruh Data ---
+  Sehat                 : 957
+  Bercak Cokelat        : 280
+  Bercak Putih          : 328
+  Daun Layu             : 348
+  Bercak Bintik Hitam   : 301
+<Figure size 800x400 with 1 Axes>--- Distribusi Spesies - Seluruh Data ---
+  Hoya Macrophylla      : 218
+  Hoya Wayeti           : 182
+  Hoya australis        : 236
+  Hoya callistophylla   : 172
+  Hoya finlaysonii      : 237
+  Hoya imperialis       : 165
+  Hoya kerrii           : 289
+  Hoya lacunosa         : 346
+  Hoya pubicalyx        : 139
+  hoya carnosa          : 230
+<Figure size 800x400 with 1 Axes>Sebelum filter -> Train: 1551 | Val: 330 | Test: 333
+Setelah filter  -> Train: 1551 (natural+putih) | Val: 329 (natural) | Test: 333 (natural)
+--- Distribusi - TRAIN Penyakit ---
+  Sehat                 : 670
+  Bercak Cokelat        : 196
+  Bercak Putih          : 231
+  Daun Layu             : 244
+  Bercak Bintik Hitam   : 210
+<Figure size 800x400 with 1 Axes>--- Distribusi - VAL Penyakit ---
+  Sehat                 : 144
+  Bercak Cokelat        : 41
+  Bercak Putih          : 47
+  Daun Layu             : 53
+  Bercak Bintik Hitam   : 44
+<Figure size 800x400 with 1 Axes>--- Distribusi - TEST Penyakit ---
+  Sehat                 : 143
+  Bercak Cokelat        : 43
+  Bercak Putih          : 49
+  Daun Layu             : 51
+  Bercak Bintik Hitam   : 47
+<Figure size 800x400 with 1 Axes>--- Distribusi - TRAIN Spesies ---
+  Hoya Macrophylla      : 152
+  Hoya Wayeti           : 127
+  Hoya australis        : 166
+  Hoya callistophylla   : 121
+  Hoya finlaysonii      : 165
+  Hoya imperialis       : 115
+  Hoya kerrii           : 203
+  Hoya lacunosa         : 243
+  Hoya pubicalyx        : 98
+  hoya carnosa          : 161
+<Figure size 800x400 with 1 Axes>--- Distribusi - VAL Spesies ---
+  Hoya Macrophylla      : 32
+  Hoya Wayeti           : 26
+  Hoya australis        : 34
+  Hoya callistophylla   : 25
+  Hoya finlaysonii      : 36
+  Hoya imperialis       : 25
+  Hoya kerrii           : 44
+  Hoya lacunosa         : 52
+  Hoya pubicalyx        : 21
+  hoya carnosa          : 34
+<Figure size 800x400 with 1 Axes>--- Distribusi - TEST Spesies ---
+  Hoya Macrophylla      : 34
+  Hoya Wayeti           : 29
+  Hoya australis        : 36
+  Hoya callistophylla   : 25
+  Hoya finlaysonii      : 36
+  Hoya imperialis       : 25
+  Hoya kerrii           : 42
+  Hoya lacunosa         : 51
+  Hoya pubicalyx        : 20
+  hoya carnosa          : 35
+<Figure size 800x400 with 1 Axes>Pipeline transform siap.
+WeightedRandomSampler GABUNGAN (disease x species) aktif.
+{'train': 3350, 'val': 329, 'test': 333}
+<Figure size 800x2000 with 10 Axes>Downloading: "https://download.pytorch.org/models/resnet50-11ad3fa6.pth" to /root/.cache/torch/hub/checkpoints/resnet50-11ad3fa6.pth
+100%|██████████| 97.8M/97.8M [00:00<00:00, 231MB/s]
+Backbone: resnet50 | Param dilatih (head_only): 790,159 / 24,298,191
+Loss ganda & optimizer siap.
+[Unfreeze] Epoch 1: stage='head_only' -> 790,159 param trainable
+Epoch 1/60
+------------------------------
+Train Loss: 2.0704  F1-Disease: 0.5352  F1-Species: 0.5399
+Val   Loss: 1.7838  F1-Disease: 0.5863  F1-Species: 0.6049
+  -> Model terbaik baru (Skor gabungan: 0.5919)
+
+Epoch 2/60
+------------------------------
+Train Loss: 1.7566  F1-Disease: 0.6443  F1-Species: 0.6911
+Val   Loss: 1.6736  F1-Disease: 0.5938  F1-Species: 0.6382
+  -> Model terbaik baru (Skor gabungan: 0.6071)
+
+Epoch 3/60
+------------------------------
+Train Loss: 1.7335  F1-Disease: 0.6767  F1-Species: 0.7630
+Val   Loss: 1.6015  F1-Disease: 0.6350  F1-Species: 0.6998
+  -> Model terbaik baru (Skor gabungan: 0.6545)
+
+  [Checkpoint disimpan di epoch 3]
+Epoch 4/60
+------------------------------
+Train Loss: 1.6744  F1-Disease: 0.7191  F1-Species: 0.7819
+Val   Loss: 1.6277  F1-Disease: 0.6125  F1-Species: 0.7111
+
+Epoch 5/60
+------------------------------
+Train Loss: 1.6942  F1-Disease: 0.7409  F1-Species: 0.7898
+Val   Loss: 1.5963  F1-Disease: 0.6328  F1-Species: 0.7072
+  -> Model terbaik baru (Skor gabungan: 0.6552)
+
+[Unfreeze] Epoch 6: stage='layer4' -> 15,754,895 param trainable
+Epoch 6/60
+------------------------------
+Train Loss: 1.5179  F1-Disease: 0.7248  F1-Species: 0.7802
+Val   Loss: 1.5789  F1-Disease: 0.6100  F1-Species: 0.6982
+
+  [Checkpoint disimpan di epoch 6]
+Epoch 7/60
+------------------------------
+Train Loss: 1.4887  F1-Disease: 0.7549  F1-Species: 0.8034
+Val   Loss: 1.5763  F1-Disease: 0.6265  F1-Species: 0.6874
+
+Epoch 8/60
+------------------------------
+Train Loss: 1.5710  F1-Disease: 0.7517  F1-Species: 0.8141
+Val   Loss: 1.5727  F1-Disease: 0.6308  F1-Species: 0.6974
+
+Epoch 9/60
+------------------------------
+Train Loss: 1.5095  F1-Disease: 0.7902  F1-Species: 0.8226
+Val   Loss: 1.5243  F1-Disease: 0.6305  F1-Species: 0.7426
+  -> Model terbaik baru (Skor gabungan: 0.6641)
+
+  [Checkpoint disimpan di epoch 9]
+Epoch 10/60
+------------------------------
+Train Loss: 1.4775  F1-Disease: 0.7654  F1-Species: 0.8232
+Val   Loss: 1.5340  F1-Disease: 0.6336  F1-Species: 0.7052
+
+Epoch 11/60
+------------------------------
+Train Loss: 1.4589  F1-Disease: 0.7523  F1-Species: 0.8170
+Val   Loss: 1.5425  F1-Disease: 0.6970  F1-Species: 0.6953
+  -> Model terbaik baru (Skor gabungan: 0.6965)
+
+Epoch 12/60
+------------------------------
+Train Loss: 1.4240  F1-Disease: 0.7894  F1-Species: 0.8400
+Val   Loss: 1.7295  F1-Disease: 0.6243  F1-Species: 0.7027
+
+  [Checkpoint disimpan di epoch 12]
+Epoch 13/60
+------------------------------
+Train Loss: 1.4587  F1-Disease: 0.7934  F1-Species: 0.8407
+Val   Loss: 1.5582  F1-Disease: 0.6633  F1-Species: 0.7195
+
+Epoch 14/60
+------------------------------
+Train Loss: 1.4129  F1-Disease: 0.8010  F1-Species: 0.8439
+Val   Loss: 1.5308  F1-Disease: 0.6498  F1-Species: 0.7209
+
+Epoch 15/60
+------------------------------
+Train Loss: 1.3722  F1-Disease: 0.8215  F1-Species: 0.8652
+Val   Loss: 1.5412  F1-Disease: 0.6481  F1-Species: 0.7188
+
+  [Checkpoint disimpan di epoch 15]
+[Unfreeze] Epoch 16: stage='layer3_4' -> 22,853,263 param trainable
+Epoch 16/60
+------------------------------
+Train Loss: 1.4063  F1-Disease: 0.8201  F1-Species: 0.8589
+Val   Loss: 1.5093  F1-Disease: 0.6382  F1-Species: 0.7316
+
+Epoch 17/60
+------------------------------
+Train Loss: 1.2878  F1-Disease: 0.8267  F1-Species: 0.8644
+Val   Loss: 1.5026  F1-Disease: 0.6539  F1-Species: 0.7266
+
+Epoch 18/60
+------------------------------
+Train Loss: 1.3309  F1-Disease: 0.8475  F1-Species: 0.8674
+Val   Loss: 1.5390  F1-Disease: 0.6405  F1-Species: 0.7523
+
+  [Checkpoint disimpan di epoch 18]
+Epoch 19/60
+------------------------------
+Train Loss: 1.3569  F1-Disease: 0.8307  F1-Species: 0.8680
+Val   Loss: 1.4910  F1-Disease: 0.6836  F1-Species: 0.7483
+  -> Model terbaik baru (Skor gabungan: 0.7030)
+
+Epoch 20/60
+------------------------------
+Train Loss: 1.2343  F1-Disease: 0.8412  F1-Species: 0.8778
+Val   Loss: 1.4754  F1-Disease: 0.6441  F1-Species: 0.7509
+
+Epoch 21/60
+------------------------------
+Train Loss: 1.2988  F1-Disease: 0.8374  F1-Species: 0.8690
+Val   Loss: 1.5244  F1-Disease: 0.6664  F1-Species: 0.7440
+
+  [Checkpoint disimpan di epoch 21]
+Epoch 22/60
+------------------------------
+Train Loss: 1.3284  F1-Disease: 0.8436  F1-Species: 0.8677
+Val   Loss: 1.4577  F1-Disease: 0.6679  F1-Species: 0.7313
+
+Epoch 23/60
+------------------------------
+Train Loss: 1.3372  F1-Disease: 0.8397  F1-Species: 0.8909
+Val   Loss: 1.4123  F1-Disease: 0.6673  F1-Species: 0.7549
+
+Epoch 24/60
+------------------------------
+Train Loss: 1.3621  F1-Disease: 0.8535  F1-Species: 0.8856
+Val   Loss: 1.4193  F1-Disease: 0.7021  F1-Species: 0.7689
+  -> Model terbaik baru (Skor gabungan: 0.7222)
+
+  [Checkpoint disimpan di epoch 24]
+Epoch 25/60
+------------------------------
+Train Loss: 1.2830  F1-Disease: 0.8429  F1-Species: 0.8828
+Val   Loss: 1.4526  F1-Disease: 0.6753  F1-Species: 0.7369
+
+Epoch 26/60
+------------------------------
+Train Loss: 1.2152  F1-Disease: 0.8649  F1-Species: 0.8852
+Val   Loss: 1.4015  F1-Disease: 0.6855  F1-Species: 0.7724
+
+Epoch 27/60
+------------------------------
+Train Loss: 1.2165  F1-Disease: 0.8635  F1-Species: 0.8909
+Val   Loss: 1.4097  F1-Disease: 0.6502  F1-Species: 0.7343
+
+  [Checkpoint disimpan di epoch 27]
+Epoch 28/60
+------------------------------
+Train Loss: 1.3929  F1-Disease: 0.8565  F1-Species: 0.8929
+Val   Loss: 1.4578  F1-Disease: 0.6759  F1-Species: 0.7457
+
+Epoch 29/60
+------------------------------
+Train Loss: 1.3252  F1-Disease: 0.8658  F1-Species: 0.8906
+Val   Loss: 1.4352  F1-Disease: 0.6949  F1-Species: 0.7436
+
+Epoch 30/60
+------------------------------
+Train Loss: 1.2498  F1-Disease: 0.8613  F1-Species: 0.8925
+Val   Loss: 1.4391  F1-Disease: 0.6503  F1-Species: 0.7674
+
+  [Checkpoint disimpan di epoch 30]
+Epoch 31/60
+------------------------------
+Train Loss: 1.2706  F1-Disease: 0.8607  F1-Species: 0.8968
+Val   Loss: 1.3792  F1-Disease: 0.6739  F1-Species: 0.7592
+
+Epoch 32/60
+------------------------------
+Train Loss: 1.2708  F1-Disease: 0.8688  F1-Species: 0.9105
+Val   Loss: 1.4117  F1-Disease: 0.6617  F1-Species: 0.7655
+
+Epoch 33/60
+------------------------------
+Train Loss: 1.2745  F1-Disease: 0.8866  F1-Species: 0.8950
+Val   Loss: 1.4380  F1-Disease: 0.6698  F1-Species: 0.7564
+
+  [Checkpoint disimpan di epoch 33]
+Epoch 34/60
+------------------------------
+Train Loss: 1.2585  F1-Disease: 0.8693  F1-Species: 0.8816
+Val   Loss: 1.3954  F1-Disease: 0.6603  F1-Species: 0.7672
+
+Epoch 35/60
+------------------------------
+Train Loss: 1.2808  F1-Disease: 0.8762  F1-Species: 0.9017
+Val   Loss: 1.4038  F1-Disease: 0.6736  F1-Species: 0.7625
+
+Epoch 36/60
+------------------------------
+Train Loss: 1.1578  F1-Disease: 0.8853  F1-Species: 0.8996
+Val   Loss: 1.3555  F1-Disease: 0.6671  F1-Species: 0.7716
+
+  [Checkpoint disimpan di epoch 36]
+Epoch 37/60
+------------------------------
+Train Loss: 1.3565  F1-Disease: 0.8673  F1-Species: 0.8962
+Val   Loss: 1.3790  F1-Disease: 0.6868  F1-Species: 0.7518
+
+Epoch 38/60
+------------------------------
+Train Loss: 1.1921  F1-Disease: 0.8822  F1-Species: 0.8976
+Val   Loss: 1.3948  F1-Disease: 0.6645  F1-Species: 0.7626
+
+Epoch 39/60
+------------------------------
+Train Loss: 1.1933  F1-Disease: 0.8790  F1-Species: 0.8991
+Val   Loss: 1.4014  F1-Disease: 0.6711  F1-Species: 0.7540
+
+  [Checkpoint disimpan di epoch 39]
+Early stopping di epoch 39
+
+Training selesai dalam 31m 49s
+Best Combined Score: 0.7222 (F1-Disease saat itu: 0.7021)
+
+=== Fine-tuning SWA (6 epoch tambahan) ===
+  SWA epoch 1/6 selesai
+  SWA epoch 2/6 selesai
+  SWA epoch 3/6 selesai
+  SWA epoch 4/6 selesai
+  SWA epoch 5/6 selesai
+  SWA epoch 6/6 selesai
+
+Model biasa -> Skor: 0.7833 (D:0.7749, S:0.8031)
+SWA model   -> Skor: 0.7464 (D:0.7292, S:0.7866)
+-> Model biasa masih lebih baik, SWA TIDAK dipakai.
+<Figure size 1400x500 with 2 Axes>Epoch terbaik: 24 | F1-Disease: 0.7021 | F1-Species: 0.7689
+=== CLASSIFICATION REPORT — PENYAKIT ===
+                     precision    recall  f1-score   support
+
+              Sehat       0.93      0.90      0.91       143
+     Bercak Cokelat       0.68      0.70      0.69        43
+       Bercak Putih       0.63      0.78      0.70        49
+          Daun Layu       0.69      0.78      0.73        51
+Bercak Bintik Hitam       0.91      0.66      0.77        47
+
+           accuracy                           0.80       333
+          macro avg       0.77      0.76      0.76       333
+       weighted avg       0.82      0.80      0.80       333
+
+
+=== CLASSIFICATION REPORT — SPESIES ===
+                     precision    recall  f1-score   support
+
+   Hoya Macrophylla       0.89      0.94      0.91        34
+        Hoya Wayeti       0.88      0.97      0.92        29
+     Hoya australis       0.86      0.83      0.85        36
+Hoya callistophylla       0.81      0.84      0.82        25
+   Hoya finlaysonii       0.79      0.83      0.81        36
+    Hoya imperialis       0.88      0.84      0.86        25
+        Hoya kerrii       0.95      0.93      0.94        42
+      Hoya lacunosa       0.95      0.69      0.80        51
+     Hoya pubicalyx       0.62      0.80      0.70        20
+       hoya carnosa       0.74      0.80      0.77        35
+
+           accuracy                           0.84       333
+          macro avg       0.83      0.85      0.84       333
+       weighted avg       0.85      0.84      0.84       333
+
+<Figure size 800x600 with 2 Axes><Figure size 800x600 with 2 Axes><Figure size 1800x475 with 3 Axes><Figure size 1800x750 with 3 Axes><Figure size 1300x2400 with 18 Axes>Temperature terkalibrasi: 0.975
+{'spesies': {'nama': 'hoya carnosa', 'confidence': 51.9}, 'gejala': {'status': 'sakit', 'nama_tampilan': 'Bercak Cokelat', 'nama_kelas_model': 'Bercak Cokelat', 'confidence': 38.0, 'top3': [{'nama': 'Bercak Cokelat', 'confidence': 38.0}, {'nama': 'Bercak Bintik Hitam', 'confidence': 32.3}, {'nama': 'Bercak Putih', 'confidence': 12.7}]}, 'faktor_penyebab': None, 'penanganan': None}
+Semua artefak tersimpan di: /kaggle/working//outputs
+['augmentasi_before_after.png', 'checkpoint_resnet50.pth', 'class_names.json', 'classification_report_disease.json', 'classification_report_species.json', 'cm_disease_resnet50.png', 'cm_species_resnet50.png', 'config.json', 'deployment_meta.json', 'distribusi_penyakit.png', 'distribusi_spesies.png', 'gradcam_resnet50.png', 'hoya_multitask_resnet50_final.pth', 'hoya_multitask_resnet50_traced.pt', 'metrics_penyakit_-_resnet50.png', 'metrics_spesies_-_resnet50.png', 'species_names.json', 'temperature.json', 'training_curves_resnet50.png', 'training_history.json']
