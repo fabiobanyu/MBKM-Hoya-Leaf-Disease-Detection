@@ -3,6 +3,9 @@ import io
 import json
 import base64
 import torch
+torch.set_num_threads(1)
+torch.set_grad_enabled(False)
+
 import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image
