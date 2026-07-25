@@ -14,8 +14,19 @@
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
     <div class="bg-orb orb-3"></div>
-
     <div class="container">
+        <!-- Institution Logo Badges - Top Left -->
+        <!-- Use id="institutionLogos" so we can hide it via JS later -->
+        <div class="institution-badge-pill" id="institutionLogos" title="BRIN × ITERA">
+            <a href="https://brin.go.id/orei" target="_blank" rel="noopener noreferrer" class="inst-logo-slot brin">
+                <img src="{{ url_for('static', filename='logo-brin.png') }}" alt="Logo BRIN">
+            </a>
+            <div class="inst-pill-divider"></div>
+            <a href="https://www.itera.ac.id/" target="_blank" rel="noopener noreferrer" class="inst-logo-slot itera">
+                <img src="{{ url_for('static', filename='logo-itera.png') }}" alt="Logo ITERA">
+            </a>
+        </div>
+
         <header>
             <div class="logo-container" id="logoHome" title="Return to Home">
                 <i class="fa-solid fa-leaf logo-icon"></i>
@@ -26,82 +37,162 @@
                 <span class="system-badge guard-badge"><i class="fa-solid fa-shield-halved"></i> Guard: <strong>MobileNetV3-Small</strong></span>
                 <span class="system-badge main-badge"><i class="fa-solid fa-brain"></i> Classifier: <strong>DenseNet121 + CBAM</strong></span>
             </div>
+            
+            <!-- Main Navigation Bar -->
+            <nav class="main-nav">
+                <button class="nav-btn active" id="navHomeBtn"><i class="fa-solid fa-house"></i> Beranda</button>
+                <button class="nav-btn" id="navDiseaseBtn"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
+                <button class="nav-btn disabled" id="navSpeciesBtn" title="Segera Hadir"><i class="fa-solid fa-seedling"></i> 10 Spesies (Segera)</button>
+            </nav>
         </header>
 
         <main>
-            <!-- Upload Section -->
-            <section class="upload-section glass-panel" id="uploadPanel">
-                <!-- Mode Toggle -->
-                <div class="mode-toggle">
-                    <button class="mode-btn active" id="modeUploadBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
-                    <button class="mode-btn" id="modeCameraBtn"><i class="fa-solid fa-camera"></i> Camera</button>
-                </div>
+            <!-- ==========================================
+                 PAGE 1: BERANDA (HOME)
+                 ========================================== -->
+            <div id="homePage" class="page-section active-page">
+                <!-- Upload Section -->
+                <section class="upload-section glass-panel" id="uploadPanel">
+                    <!-- Mode Toggle -->
+                    <div class="mode-toggle">
+                        <button class="mode-btn active" id="modeUploadBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+                        <button class="mode-btn" id="modeCameraBtn"><i class="fa-solid fa-camera"></i> Camera</button>
+                    </div>
 
-                <!-- Upload Area -->
-                <div class="upload-area" id="dropZone">
-                    <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-                    <h3>Upload Hoya Leaf</h3>
-                    <p>Drag & drop your image here, or click to browse</p>
-                    <input type="file" id="fileInput" accept="image/jpeg, image/png, image/jpg" hidden>
-                    <button class="btn primary-btn" id="browseBtn">Browse Files</button>
-                </div>
-                
-                <!-- Camera Area (Hidden initially) -->
-                <div class="camera-area hidden" id="cameraZone">
-                    <div class="video-container">
-                        <video id="cameraStream" autoplay playsinline></video>
-                        <canvas id="cameraCanvas" hidden></canvas>
-                        <div class="camera-overlay">
-                            <div class="scan-frame"></div>
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="dropZone">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <h3>Upload Hoya Leaf</h3>
+                        <p>Drag & drop your image here, or click to browse</p>
+                        <input type="file" id="fileInput" accept="image/jpeg, image/png, image/jpg" hidden>
+                        <button class="btn primary-btn" id="browseBtn">Browse Files</button>
+                    </div>
+                    
+                    <!-- Camera Area (Hidden initially) -->
+                    <div class="camera-area hidden" id="cameraZone">
+                        <div class="video-container">
+                            <video id="cameraStream" autoplay playsinline></video>
+                            <canvas id="cameraCanvas" hidden></canvas>
+                            <div class="camera-overlay">
+                                <div class="scan-frame"></div>
+                            </div>
+                            <div class="brightness-control" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; background: rgba(0,0,0,0.5); padding: 10px 5px; border-radius: 20px; z-index: 10;">
+                                <i class="fa-solid fa-sun" style="font-size: 1.1rem; color: white;"></i>
+                                <input type="range" id="brightnessSlider" min="0.5" max="2" step="0.1" value="1" style="writing-mode: vertical-lr; direction: rtl; appearance: slider-vertical; width: 16px; height: 120px; cursor: pointer;">
+                                <i class="fa-solid fa-moon" style="font-size: 0.9rem; color: white;"></i>
+                            </div>
                         </div>
-                        <div class="brightness-control" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; background: rgba(0,0,0,0.5); padding: 10px 5px; border-radius: 20px; z-index: 10;">
-                            <i class="fa-solid fa-sun" style="font-size: 1.1rem; color: white;"></i>
-                            <input type="range" id="brightnessSlider" min="0.5" max="2" step="0.1" value="1" style="writing-mode: vertical-lr; direction: rtl; appearance: slider-vertical; width: 16px; height: 120px; cursor: pointer;">
-                            <i class="fa-solid fa-moon" style="font-size: 0.9rem; color: white;"></i>
+                        <button class="shutter-btn" id="captureBtn">
+                            <div class="shutter-inner"></div>
+                        </button>
+                        <p class="camera-hint">Position the leaf in the frame and capture</p>
+                    </div>
+                    
+                    <!-- Error Banner (hidden initially) -->
+                    <div class="error-banner hidden" id="errorBanner" style="background: rgba(239, 68, 68, 0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(239, 68, 68, 0.3); border-left: 5px solid #ef4444; padding: 15px 20px; margin-bottom: 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.15); text-align: left; transition: opacity 0.3s ease;">
+                        <div id="errorIconWrapper" style="background: rgba(239, 68, 68, 0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);">
+                            <i id="errorIcon" class="fa-solid fa-shield-halved" style="color: #fca5a5; font-size: 1.2rem;"></i>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 id="errorTitle" style="color: #fca5a5; margin: 0 0 4px 0; font-size: 1.05rem; font-family: 'Outfit', sans-serif; letter-spacing: 0.5px;">Sistem Keamanan AI</h4>
+                            <p id="errorMessage" style="margin: 0; color: #f8fafc; font-size: 0.95rem; line-height: 1.5;"></p>
+                        </div>
+                        <button id="closeErrorBtn" style="background: rgba(255, 255, 255, 0.1); border: none; color: #cbd5e1; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+
+                    <!-- Preview area (hidden initially) -->
+                    <div class="preview-area hidden" id="previewArea">
+                        <p class="crop-hint">
+                            <i class="fa-solid fa-crop-simple"></i> Atur pemotong (crop) agar fokus <b>pada area daun utama</b>.
+                        </p>
+                        <div class="preview-image-frame">
+                            <img id="imagePreview" src="" alt="Preview" style="display:block; max-width: 100%;">
+                        </div>
+
+                        <!-- Cropper Controls (Rotate, Flip, Reset) -->
+                        <div class="crop-toolbar">
+                            <button class="crop-tool-btn" id="rotateLeftBtn" title="Putar Kiri (-90°)"><i class="fa-solid fa-rotate-left"></i> Putar Kiri</button>
+                            <button class="crop-tool-btn" id="rotateRightBtn" title="Putar Kanan (+90°)"><i class="fa-solid fa-rotate-right"></i> Putar Kanan</button>
+                            <button class="crop-tool-btn" id="flipHBtn" title="Cermin Horisontal"><i class="fa-solid fa-arrows-left-right"></i> Cermin H</button>
+                            <button class="crop-tool-btn" id="flipVBtn" title="Cermin Vertikal"><i class="fa-solid fa-arrows-up-down"></i> Cermin V</button>
+                            <button class="crop-tool-btn" id="resetCropBtn" title="Reset Posisi"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                        </div>
+
+                        <div class="preview-actions">
+                            <button class="btn secondary-btn" id="removeBtn"><i class="fa-solid fa-xmark"></i> Remove</button>
+                            <button class="btn primary-btn" id="analyzeBtn"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Image</button>
                         </div>
                     </div>
-                    <button class="shutter-btn" id="captureBtn">
-                        <div class="shutter-inner"></div>
+                </section>
+
+                <!-- About This Website (Long Box) -->
+                <section class="about-box-section glass-panel" id="mainInfoSection">
+                    <div class="about-content">
+                        <div class="about-icon-wrapper">
+                            <i class="fa-solid fa-seedling text-gradient"></i>
+                        </div>
+                        <div class="about-text">
+                            <h3>Tentang Hoya AI Vision</h3>
+                            <p><strong>Hoya AI Vision</strong> merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara <strong>BRIN</strong> (Badan Riset dan Inovasi Nasional) dan <strong>ITERA</strong> (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.</p>
+                            <p>Sistem ini diintegrasikan dengan <strong>Knowledge Graph (KG)</strong> yang mampu menyajikan informasi terstruktur dan komprehensif mengenai penanganan penyakit, penyebab, dan langkah preventif, membantu para peneliti maupun pembudidaya tanaman hias menjaga kesehatan tanaman Hoya dengan lebih presisi dan efisien.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- ==========================================
+                 PAGE 2: INFORMASI GEJALA PENYAKIT
+                 ========================================== -->
+            <div id="diseaseInfoPage" class="page-section hidden">
+                <div class="results-top-nav" style="margin-bottom: 20px;">
+                    <button class="back-home-pill" id="backToHomeFromDiseaseBtn">
+                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu Utama
                     </button>
-                    <p class="camera-hint">Position the leaf in the frame and capture</p>
+                </div>
+                <div class="content-header">
+                    <h2><i class="fa-solid fa-notes-medical text-gradient"></i> Informasi Gejala Penyakit Hoya</h2>
+                    <p>Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya agar penanganan dapat dilakukan secara dini dan akurat.</p>
                 </div>
                 
-                <!-- Error Banner (hidden initially) -->
-                <div class="error-banner hidden" id="errorBanner" style="background: rgba(239, 68, 68, 0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(239, 68, 68, 0.3); border-left: 5px solid #ef4444; padding: 15px 20px; margin-bottom: 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.15); text-align: left; transition: opacity 0.3s ease;">
-                    <div id="errorIconWrapper" style="background: rgba(239, 68, 68, 0.2); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);">
-                        <i id="errorIcon" class="fa-solid fa-shield-halved" style="color: #fca5a5; font-size: 1.2rem;"></i>
-                    </div>
-                    <div style="flex: 1;">
-                        <h4 id="errorTitle" style="color: #fca5a5; margin: 0 0 4px 0; font-size: 1.05rem; font-family: 'Outfit', sans-serif; letter-spacing: 0.5px;">Sistem Keamanan AI</h4>
-                        <p id="errorMessage" style="margin: 0; color: #f8fafc; font-size: 0.95rem; line-height: 1.5;"></p>
-                    </div>
-                    <button id="closeErrorBtn" style="background: rgba(255, 255, 255, 0.1); border: none; color: #cbd5e1; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"><i class="fa-solid fa-xmark"></i></button>
+                <div class="table-responsive glass-panel">
+                    <table class="disease-table">
+                        <thead>
+                            <tr>
+                                <th>Jenis Penyakit</th>
+                                <th>Gejala Visual pada Daun</th>
+                                <th>Tingkat Keparahan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Bercak Daun Jamur (Fungal Leaf Spot)</strong></td>
+                                <td>Bercak-bercak melingkar berwarna cokelat atau hitam, terkadang memiliki halo (lingkaran tepi) berwarna kuning. Daun bisa menguning dan gugur jika dibiarkan.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Busuk Akar / Pangkal (Root Rot)</strong></td>
+                                <td>Daun terlihat layu, keriput, atau menguning dari pangkal meskipun media tanam basah. Terlihat bercak gelap di area pangkal daun.</td>
+                                <td><span class="badge danger">Tinggi</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kutu Putih (Mealybugs)</strong></td>
+                                <td>Bercak putih seperti kapas di sela-sela daun atau batang. Daun terlihat kusam, lengket (embun madu), dan berdebu hitam (jamur jelaga).</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bercak Mata Katak (Cercospora)</strong></td>
+                                <td>Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah dengan tepi berwarna cokelat kemerahan atau ungu.</td>
+                                <td><span class="badge info">Rendah</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Karat Daun (Rust)</strong></td>
+                                <td>Terdapat pustul atau bintik menonjol berwarna oranye, merah karat, atau cokelat di permukaan bawah atau atas daun.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <!-- Preview area (hidden initially) -->
-                <div class="preview-area hidden" id="previewArea">
-                    <p class="crop-hint">
-                        <i class="fa-solid fa-crop-simple"></i> Atur pemotong (crop) agar fokus <b>pada area daun utama</b>.
-                    </p>
-                    <div class="preview-image-frame">
-                        <img id="imagePreview" src="" alt="Preview" style="display:block; max-width: 100%;">
-                    </div>
-
-                    <!-- Cropper Controls (Rotate, Flip, Reset) -->
-                    <div class="crop-toolbar">
-                        <button class="crop-tool-btn" id="rotateLeftBtn" title="Putar Kiri (-90°)"><i class="fa-solid fa-rotate-left"></i> Putar Kiri</button>
-                        <button class="crop-tool-btn" id="rotateRightBtn" title="Putar Kanan (+90°)"><i class="fa-solid fa-rotate-right"></i> Putar Kanan</button>
-                        <button class="crop-tool-btn" id="flipHBtn" title="Cermin Horisontal"><i class="fa-solid fa-arrows-left-right"></i> Cermin H</button>
-                        <button class="crop-tool-btn" id="flipVBtn" title="Cermin Vertikal"><i class="fa-solid fa-arrows-up-down"></i> Cermin V</button>
-                        <button class="crop-tool-btn" id="resetCropBtn" title="Reset Posisi"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
-                    </div>
-
-                    <div class="preview-actions">
-                        <button class="btn secondary-btn" id="removeBtn"><i class="fa-solid fa-xmark"></i> Remove</button>
-                        <button class="btn primary-btn" id="analyzeBtn"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Image</button>
-                    </div>
-                </div>
-            </section>
+            </div>
 
             <!-- Loading State (hidden initially) -->
             <section class="loading-section hidden" id="loadingSection">

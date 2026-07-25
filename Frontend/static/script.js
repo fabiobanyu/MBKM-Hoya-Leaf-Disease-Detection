@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const logoHome = document.getElementById('logoHome');
     
+    // Main Navigation
+    const navHomeBtn = document.getElementById('navHomeBtn');
+    const navDiseaseBtn = document.getElementById('navDiseaseBtn');
+    const homePage = document.getElementById('homePage');
+    const diseaseInfoPage = document.getElementById('diseaseInfoPage');
+    
     // Mode toggles and Camera UI
     const modeUploadBtn = document.getElementById('modeUploadBtn');
     const modeCameraBtn = document.getElementById('modeCameraBtn');
@@ -658,8 +664,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide errors if any
         if (errorBanner) errorBanner.classList.add('hidden');
 
-        // Hide upload, show loading smoothly
-        transitionTo(uploadPanel, loadingSection);
+        // Hide upload, info, and logo, show loading smoothly
+        const mainInfoSection = document.getElementById('mainInfoSection');
+        const institutionLogos = document.getElementById('institutionLogos');
+        transitionTo([uploadPanel, mainInfoSection, institutionLogos], loadingSection);
 
         // Get cropped canvas as blob
         cropper.getCroppedCanvas({
@@ -787,11 +795,13 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFile = null;
         fileInput.value = '';
         
-        // Hide preview and results, show upload UI
+        // Hide preview and results, show upload UI, info section, and logos
         document.querySelector('.mode-toggle').classList.remove('hidden');
         
         const toShow = modeCameraBtn.classList.contains('active') ? cameraZone : dropZone;
-        transitionTo([previewArea, resultsSection], [uploadPanel, toShow]);
+        const mainInfoSection = document.getElementById('mainInfoSection');
+        const institutionLogos = document.getElementById('institutionLogos');
+        transitionTo([previewArea, resultsSection], [uploadPanel, toShow, mainInfoSection, institutionLogos]);
         
         // Reset progress bar
         const diseaseConfidenceBar = document.getElementById('diseaseConfidenceBar');
@@ -812,18 +822,62 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (retryCropBtn) {
         retryCropBtn.addEventListener('click', () => {
-            // Hide results, show preview again smoothly
+            // Hide results, show preview again smoothly. Don't show info section/logos here.
             document.querySelector('.mode-toggle').classList.add('hidden');
             transitionTo(resultsSection, [uploadPanel, previewArea]);
         });
     }
     
-    // Clicking the logo returns to home
     if (logoHome) {
         logoHome.addEventListener('click', () => {
-            // Only stop camera if we are in results or preview (leaving the current active mode)
-            // But wait, resetToHome restarts camera if needed. Let's just use it.
+            // If not on home page, switch back to home page
+            if (!homePage.classList.contains('active-page')) {
+                navHomeBtn.click();
+            }
             resetToHome();
         });
+    }
+    
+    // --- Navigation Logic ---
+    if (navHomeBtn && navDiseaseBtn) {
+        navHomeBtn.addEventListener('click', () => {
+            navHomeBtn.classList.add('active');
+            navDiseaseBtn.classList.remove('active');
+            
+            // Switch pages using transitionTo if you want smooth fade, or just classes
+            // For simple page switch:
+            diseaseInfoPage.classList.add('hidden');
+            diseaseInfoPage.classList.remove('active-page');
+            
+            homePage.classList.remove('hidden');
+            // Slight delay to allow display block to apply before opacity transition
+            setTimeout(() => homePage.classList.add('active-page'), 10);
+            
+            resetToHome(); // Ensure upload mode is shown
+        });
+        
+        navDiseaseBtn.addEventListener('click', () => {
+            navDiseaseBtn.classList.add('active');
+            navHomeBtn.classList.remove('active');
+            
+            // Hide camera if active
+            stopCamera();
+            
+            // Hide all sections in home page
+            transitionTo([uploadPanel, previewArea, loadingSection, resultsSection], []);
+            
+            homePage.classList.add('hidden');
+            homePage.classList.remove('active-page');
+            
+            diseaseInfoPage.classList.remove('hidden');
+            setTimeout(() => diseaseInfoPage.classList.add('active-page'), 10);
+        });
+        
+        const backToHomeFromDiseaseBtn = document.getElementById('backToHomeFromDiseaseBtn');
+        if (backToHomeFromDiseaseBtn) {
+            backToHomeFromDiseaseBtn.addEventListener('click', () => {
+                navHomeBtn.click();
+            });
+        }
     }
 });
