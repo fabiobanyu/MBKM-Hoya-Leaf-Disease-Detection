@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="Frontend/static/hoya.svg" alt="Hoya Leaf Logo" width="120" />
   <h1>🍃 Hoya AI Vision</h1>
   <p><strong>Intelligent Disease Detection & Species Identification System for Hoya Plants</strong></p>
 
@@ -70,15 +69,13 @@ graph TD
     A["Unggah / Ambil Gambar"] --> B{"Smart Crop UI"}
     B --> C["Pre-processing Gambar"]
     
-    subgraph "AI Vision Pipeline"
-        C --> D{"Guard Model (MobileNetV3-Small)"}
-        D -- "Bukan Daun Hoya" --> E["Tolak Gambar"]
-        D -- "Validasi Berhasil" --> F["Main Classifier (DenseNet-121 + CBAM)"]
-        
-        F --> G1("Prediksi Penyakit")
-        F --> G2("Prediksi Spesies")
-        F --> G3("Visualisasi Heatmap (Grad-CAM)")
-    end
+    C --> D{"Guard Model (MobileNetV3)"}
+    D -- "Bukan Daun Hoya" --> E["Tolak Gambar"]
+    D -- "Validasi Berhasil" --> F["Main Classifier (DenseNet-121)"]
+    
+    F --> G1("Prediksi Penyakit")
+    F --> G2("Prediksi Spesies")
+    F --> G3("Visualisasi Heatmap")
     
     G1 --> H[("Neo4j Knowledge Graph")]
     G2 --> H
