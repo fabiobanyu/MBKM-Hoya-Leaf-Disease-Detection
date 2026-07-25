@@ -39,9 +39,9 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 MODELS_DIR = os.path.join(ROOT_DIR, 'models')
 
 # Database configuration
-NEO4J_URI = "neo4j+s://c514fd1a.databases.neo4j.io"
+NEO4J_URI = "neo4j://127.0.0.1:7687"
 NEO4J_USERNAME = "neo4j"
-NEO4J_PASSWORD = "ohgO1e8RotBKHIaaOo18Uuvp3uvC0O_Y1zWx13RAWKk"
+NEO4J_PASSWORD = "12345678"
 
 try:
     neo4j_driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USERNAME, NEO4J_PASSWORD))

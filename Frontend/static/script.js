@@ -173,7 +173,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!knowledgeSection || !knowledgeContainer) return;
         
         if (!currentKnowledge || currentKnowledge.length === 0) {
-            knowledgeSection.classList.add('hidden');
+            knowledgeSection.classList.remove('hidden');
+            const offlineMsgId = `
+                <div class="kg-offline-msg" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    <i class="fa-solid fa-database" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px; display: block;"></i>
+                    <p>Database Knowledge Graph (Neo4j) saat ini sedang offline atau tidak dapat diakses.</p>
+                    <p style="font-size: 0.85rem; opacity: 0.7;">(Tidak ada informasi penanganan yang dapat ditampilkan)</p>
+                </div>`;
+            const offlineMsgEn = `
+                <div class="kg-offline-msg" style="text-align: center; padding: 30px; color: var(--text-muted);">
+                    <i class="fa-solid fa-database" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px; display: block;"></i>
+                    <p>The Knowledge Graph Database (Neo4j) is currently offline or unreachable.</p>
+                    <p style="font-size: 0.85rem; opacity: 0.7;">(No treatment information can be displayed)</p>
+                </div>`;
+            knowledgeContainer.innerHTML = currentLang === 'en' ? offlineMsgEn : offlineMsgId;
             return;
         }
         
@@ -667,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide upload, info, and logo, show loading smoothly
         const mainInfoSection = document.getElementById('mainInfoSection');
         const institutionLogos = document.getElementById('institutionLogos');
-        transitionTo([uploadPanel, mainInfoSection, institutionLogos], loadingSection);
+        transitionTo([uploadPanel, mainInfoSection], loadingSection);
 
         // Get cropped canvas as blob
         cropper.getCroppedCanvas({
@@ -761,7 +774,10 @@ document.addEventListener('DOMContentLoaded', () => {
             renderKnowledge();
         } else {
             currentKnowledge = [];
-            if (knowledgeSection) knowledgeSection.classList.add('hidden');
+            if(langToggle) langToggle.checked = false; // reset to ID
+            currentLang = 'id';
+            if (knowledgeTitleText) knowledgeTitleText.textContent = 'Informasi Penanganan';
+            renderKnowledge();
         }
 
         // Reset toggle to Original
@@ -787,7 +803,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Reset for New Analysis ---
-    function resetToHome() {
+    function resetToHome(instant = false) {
         if (cropper) {
             cropper.destroy();
             cropper = null;
@@ -795,17 +811,29 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFile = null;
         fileInput.value = '';
         
-        // Hide preview and results, show upload UI, info section, and logos
+        // Hide preview and results, show upload UI, info section
         document.querySelector('.mode-toggle').classList.remove('hidden');
         
         const toShow = modeCameraBtn.classList.contains('active') ? cameraZone : dropZone;
         const mainInfoSection = document.getElementById('mainInfoSection');
-        const institutionLogos = document.getElementById('institutionLogos');
-        transitionTo([previewArea, resultsSection], [uploadPanel, toShow, mainInfoSection, institutionLogos]);
+        
+        if (instant) {
+            [previewArea, resultsSection, knowledgeSection].forEach(el => {
+                if(el) { el.classList.add('hidden'); el.style.animation = ''; }
+            });
+            [uploadPanel, toShow, mainInfoSection].forEach(el => {
+                if(el) { el.classList.remove('hidden'); el.style.animation = ''; }
+            });
+        } else {
+            transitionTo([previewArea, resultsSection, knowledgeSection], [uploadPanel, toShow, mainInfoSection]);
+        }
         
         // Reset progress bar
         const diseaseConfidenceBar = document.getElementById('diseaseConfidenceBar');
         if (diseaseConfidenceBar) diseaseConfidenceBar.style.width = '0%';
+        
+        // Restore history section if applicable
+        renderHistory();
         
         // Return to whichever mode was active
         if (modeCameraBtn.classList.contains('active')) {
@@ -813,12 +841,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    newAnalysisBtn.addEventListener('click', resetToHome);
+    newAnalysisBtn.addEventListener('click', () => resetToHome(false));
     
-    const backToHomeBtn = document.getElementById('backToHomeBtn');
-    if (backToHomeBtn) {
-        backToHomeBtn.addEventListener('click', resetToHome);
-    }
+
     
     if (retryCropBtn) {
         retryCropBtn.addEventListener('click', () => {
@@ -844,16 +869,15 @@ document.addEventListener('DOMContentLoaded', () => {
             navHomeBtn.classList.add('active');
             navDiseaseBtn.classList.remove('active');
             
-            // Switch pages using transitionTo if you want smooth fade, or just classes
-            // For simple page switch:
+            // Instantly prepare home page for display to avoid clashing transitions
+            resetToHome(true); 
+            
             diseaseInfoPage.classList.add('hidden');
             diseaseInfoPage.classList.remove('active-page');
             
             homePage.classList.remove('hidden');
             // Slight delay to allow display block to apply before opacity transition
             setTimeout(() => homePage.classList.add('active-page'), 10);
-            
-            resetToHome(); // Ensure upload mode is shown
         });
         
         navDiseaseBtn.addEventListener('click', () => {
@@ -864,7 +888,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stopCamera();
             
             // Hide all sections in home page
-            transitionTo([uploadPanel, previewArea, loadingSection, resultsSection], []);
+            transitionTo([uploadPanel, previewArea, loadingSection, resultsSection, knowledgeSection, historySection], []);
             
             homePage.classList.add('hidden');
             homePage.classList.remove('active-page');
@@ -873,11 +897,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => diseaseInfoPage.classList.add('active-page'), 10);
         });
         
-        const backToHomeFromDiseaseBtn = document.getElementById('backToHomeFromDiseaseBtn');
-        if (backToHomeFromDiseaseBtn) {
-            backToHomeFromDiseaseBtn.addEventListener('click', () => {
-                navHomeBtn.click();
-            });
-        }
+
     }
 });

@@ -14,19 +14,31 @@
     <div class="bg-orb orb-1"></div>
     <div class="bg-orb orb-2"></div>
     <div class="bg-orb orb-3"></div>
-    <div class="container">
-        <!-- Institution Logo Badges - Top Left -->
-        <!-- Use id="institutionLogos" so we can hide it via JS later -->
-        <div class="institution-badge-pill" id="institutionLogos" title="BRIN × ITERA">
-            <a href="https://brin.go.id/orei" target="_blank" rel="noopener noreferrer" class="inst-logo-slot brin">
-                <img src="{{ url_for('static', filename='logo-brin.png') }}" alt="Logo BRIN">
-            </a>
-            <div class="inst-pill-divider"></div>
-            <a href="https://www.itera.ac.id/" target="_blank" rel="noopener noreferrer" class="inst-logo-slot itera">
-                <img src="{{ url_for('static', filename='logo-itera.png') }}" alt="Logo ITERA">
-            </a>
+    
+    <!-- TOP NAVBAR -->
+    <nav class="top-navbar">
+        <div class="nav-container">
+            <!-- Left: Logos -->
+            <div class="nav-brand">
+                <a href="https://brin.go.id/orei" target="_blank" rel="noopener noreferrer" class="nav-logo-link brin" title="Kunjungi Website BRIN">
+                    <img src="{{ url_for('static', filename='logo-brin.png') }}" alt="Logo BRIN">
+                </a>
+                <div class="nav-divider"></div>
+                <a href="https://www.itera.ac.id/" target="_blank" rel="noopener noreferrer" class="nav-logo-link itera" title="Kunjungi Website ITERA">
+                    <img src="{{ url_for('static', filename='logo-itera.png') }}" alt="Logo ITERA">
+                </a>
+            </div>
+            
+            <!-- Right: Menus -->
+            <div class="nav-menu">
+                <button class="nav-btn active" id="navHomeBtn"><i class="fa-solid fa-house"></i> Beranda</button>
+                <button class="nav-btn" id="navDiseaseBtn"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
+                <button class="nav-btn disabled" id="navSpeciesBtn" title="Segera Hadir"><i class="fa-solid fa-seedling"></i> 10 Spesies (Segera)</button>
+            </div>
         </div>
+    </nav>
 
+    <div class="container">
         <header>
             <div class="logo-container" id="logoHome" title="Return to Home">
                 <i class="fa-solid fa-leaf logo-icon"></i>
@@ -37,13 +49,6 @@
                 <span class="system-badge guard-badge"><i class="fa-solid fa-shield-halved"></i> Guard: <strong>MobileNetV3-Small</strong></span>
                 <span class="system-badge main-badge"><i class="fa-solid fa-brain"></i> Classifier: <strong>DenseNet121 + CBAM</strong></span>
             </div>
-            
-            <!-- Main Navigation Bar -->
-            <nav class="main-nav">
-                <button class="nav-btn active" id="navHomeBtn"><i class="fa-solid fa-house"></i> Beranda</button>
-                <button class="nav-btn" id="navDiseaseBtn"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
-                <button class="nav-btn disabled" id="navSpeciesBtn" title="Segera Hadir"><i class="fa-solid fa-seedling"></i> 10 Spesies (Segera)</button>
-            </nav>
         </header>
 
         <main>
@@ -144,11 +149,7 @@
                  PAGE 2: INFORMASI GEJALA PENYAKIT
                  ========================================== -->
             <div id="diseaseInfoPage" class="page-section hidden">
-                <div class="results-top-nav" style="margin-bottom: 20px;">
-                    <button class="back-home-pill" id="backToHomeFromDiseaseBtn">
-                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu Utama
-                    </button>
-                </div>
+
                 <div class="content-header">
                     <h2><i class="fa-solid fa-notes-medical text-gradient"></i> Informasi Gejala Penyakit Hoya</h2>
                     <p>Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya agar penanganan dapat dilakukan secara dini dan akurat.</p>
@@ -165,8 +166,48 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td><strong>Bercak Mata Katak (Cercospora)</strong></td>
+                                <td>Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah dengan tepi berwarna cokelat kemerahan atau ungu.</td>
+                                <td><span class="badge info">Rendah</span></td>
+                            </tr>
+                            <tr>
                                 <td><strong>Bercak Daun Jamur (Fungal Leaf Spot)</strong></td>
                                 <td>Bercak-bercak melingkar berwarna cokelat atau hitam, terkadang memiliki halo (lingkaran tepi) berwarna kuning. Daun bisa menguning dan gugur jika dibiarkan.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bercak Cokelat (Brown Spots)</strong></td>
+                                <td>Terdapat bercak-bercak berwarna cokelat pada permukaan daun. Biasanya disebabkan oleh infeksi jamur atau kondisi kelembapan yang terlalu tinggi.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bercak Putih (White Spots)</strong></td>
+                                <td>Bercak putih menyerupai tepung atau jamur pada daun. Sering kali disebabkan oleh embun tepung (powdery mildew) atau hama tertentu.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bercak Bintik Hitam (Black Spot Disease)</strong></td>
+                                <td>Bintik-bintik hitam kecil yang menyebar di permukaan daun. Dapat menyebabkan daun menguning dan gugur secara prematur.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Karat Daun (Rust)</strong></td>
+                                <td>Terdapat pustul atau bintik menonjol berwarna oranye, merah karat, atau cokelat di permukaan bawah atau atas daun.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kutu Putih (Mealybugs)</strong></td>
+                                <td>Bercak putih seperti kapas di sela-sela daun atau batang. Daun terlihat kusam, lengket (embun madu), dan berdebu hitam (jamur jelaga).</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Kutu Daun (Aphids)</strong></td>
+                                <td>Serangga kecil yang berkumpul di pucuk daun muda. Dapat menyebabkan daun mengeriting dan pertumbuhan tanaman terhambat.</td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tungau Laba-laba (Spider Mites)</strong></td>
+                                <td>Daun terlihat memiliki bintik-bintik kuning kecil dan kusam. Terlihat adanya jaring halus di sekitar pangkal daun jika sudah parah.</td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
@@ -175,19 +216,9 @@
                                 <td><span class="badge danger">Tinggi</span></td>
                             </tr>
                             <tr>
-                                <td><strong>Kutu Putih (Mealybugs)</strong></td>
-                                <td>Bercak putih seperti kapas di sela-sela daun atau batang. Daun terlihat kusam, lengket (embun madu), dan berdebu hitam (jamur jelaga).</td>
-                                <td><span class="badge warning">Sedang</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Bercak Mata Katak (Cercospora)</strong></td>
-                                <td>Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah dengan tepi berwarna cokelat kemerahan atau ungu.</td>
-                                <td><span class="badge info">Rendah</span></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Karat Daun (Rust)</strong></td>
-                                <td>Terdapat pustul atau bintik menonjol berwarna oranye, merah karat, atau cokelat di permukaan bawah atau atas daun.</td>
-                                <td><span class="badge warning">Sedang</span></td>
+                                <td><strong>Daun Layu (Wilting Leaves)</strong></td>
+                                <td>Daun terlihat kehilangan turgor (kekakuan), keriput, atau menguning. Bisa mengindikasikan masalah pada akar, seperti busuk akar (root rot) atau kekurangan/kelebihan air.</td>
+                                <td><span class="badge danger">Tinggi</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -208,11 +239,7 @@
 
             <!-- Results Section (hidden initially) -->
             <section class="results-section hidden" id="resultsSection">
-                <div class="results-top-nav">
-                    <button class="back-home-pill" id="backToHomeBtn">
-                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Menu Utama
-                    </button>
-                </div>
+
                 
                 <h2 class="section-title">Analysis Results</h2>
                 

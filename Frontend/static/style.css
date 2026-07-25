@@ -1331,109 +1331,101 @@ input:checked + .slider:before {
 }
 
 /* ============================================
-   Institution Logo Pill (Combined Capsule)
+   Top Navigation Bar
    ============================================ */
-.institution-badge-pill {
-    position: fixed;
-    top: 1.25rem;
-    left: 1.5rem;
-    display: flex;
-    align-items: center;
-    z-index: 100;
-    border-radius: 999px;
-    background: rgba(20, 30, 48, 0.8);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
-    box-shadow:
-        0 4px 24px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-    overflow: hidden;
-    animation: fadeInDown 0.8s ease-out;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.3s ease,
-                opacity 0.3s ease;
+body {
+    padding-top: 60px; /* Prevent fixed navbar from covering header */
 }
 
-.institution-badge-pill.hidden {
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.85); /* Slightly darker/more opaque */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeInDown 0.6s ease-out;
+}
+
+.nav-container {
+    max-width: 1000px; /* Match main .container */
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 2rem;
+    width: 100%;
+}
+
+.top-navbar.hidden {
+    transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
+    transition: all 0.4s ease;
 }
 
-.institution-badge-pill:hover {
-    transform: scale(1.05);
-    box-shadow:
-        0 6px 32px rgba(0, 0, 0, 0.45),
-        0 0 24px rgba(16, 185, 129, 0.1),
-        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+/* Logos inside Navbar */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    overflow: hidden;
 }
 
-/* Each logo slot inside the pill */
-.inst-logo-slot {
+.nav-logo-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 14px;
-    height: 52px;
-}
-
-.inst-logo-slot img {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
+    padding: 6px 12px;
+    height: 44px;
     transition: filter 0.3s ease;
 }
 
-.institution-badge-pill:hover .inst-logo-slot img {
-    filter: brightness(1.1);
+.nav-logo-link:hover {
+    filter: brightness(1.15);
 }
 
-/* BRIN slot: white background for red logo visibility */
-.inst-logo-slot.brin {
+.nav-logo-link.brin {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 999px 0 0 999px;
 }
 
-.inst-logo-slot.brin img {
-    height: 34px;
-}
-
-/* Divider between the two logos */
-.inst-pill-divider {
-    width: 1.5px;
+.nav-logo-link.brin img {
     height: 30px;
-    background: rgba(255, 255, 255, 0.12);
-    flex-shrink: 0;
+    width: auto;
 }
 
-/* ITERA slot */
-.inst-logo-slot.itera {
-    padding: 8px 16px 8px 14px;
+.nav-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 4px;
 }
 
-.inst-logo-slot.itera img {
-    height: 34px;
+.nav-logo-link.itera img {
+    height: 30px;
+    width: auto;
 }
 
-/* ============================================
-   Main Navigation Bar
-   ============================================ */
-.main-nav {
+/* Nav Menu Buttons */
+.nav-menu {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .nav-btn {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #cbd5e1;
-    padding: 10px 20px;
+    padding: 8px 18px;
     border-radius: 999px;
     font-family: 'Outfit', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -1442,22 +1434,36 @@ input:checked + .slider:before {
 }
 
 .nav-btn:hover:not(.disabled) {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(16, 185, 129, 0.5); /* Slight green tint on border */
+    transform: translateY(-3px);
     color: #fff;
-    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); /* Green glow effect */
 }
 
 .nav-btn.active {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    border-color: transparent;
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 .nav-btn.disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .top-navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        position: relative; /* Unfix on mobile for space */
+    }
+    
+    .nav-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
 /* ============================================
@@ -1465,12 +1471,39 @@ input:checked + .slider:before {
    ============================================ */
 .page-section {
     display: none;
-    animation: fadeInDown 0.6s ease-out;
+    opacity: 0;
 }
 
 .page-section.active-page {
     display: block;
+    animation: fadeIn 0.4s ease-out forwards;
 }
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* Staggered Animations for Home Page Elements */
+.active-page .upload-panel { opacity: 0; animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards; }
+.active-page .about-box-section { opacity: 0; animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards; }
+.active-page .system-badge-container { opacity: 0; animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards; }
+
+/* Staggered Animations for Disease Info Page */
+.active-page .content-header { opacity: 0; animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards; }
+.active-page .disease-table thead { opacity: 0; animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards; }
+
+.active-page .disease-table tbody tr { opacity: 0; animation: fadeInUp 1.0s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.active-page .disease-table tbody tr:nth-child(1) { animation-delay: 0.45s; }
+.active-page .disease-table tbody tr:nth-child(2) { animation-delay: 0.60s; }
+.active-page .disease-table tbody tr:nth-child(3) { animation-delay: 0.75s; }
+.active-page .disease-table tbody tr:nth-child(4) { animation-delay: 0.90s; }
+.active-page .disease-table tbody tr:nth-child(5) { animation-delay: 1.05s; }
+.active-page .disease-table tbody tr:nth-child(6) { animation-delay: 1.20s; }
+.active-page .disease-table tbody tr:nth-child(7) { animation-delay: 1.35s; }
+.active-page .disease-table tbody tr:nth-child(8) { animation-delay: 1.50s; }
+.active-page .disease-table tbody tr:nth-child(9) { animation-delay: 1.65s; }
+.active-page .disease-table tbody tr:nth-child(10) { animation-delay: 1.80s; }
+.active-page .disease-table tbody tr:nth-child(11) { animation-delay: 1.95s; }
 
 /* ============================================
    About Box Section
@@ -1633,5 +1666,16 @@ input:checked + .slider:before {
 
     .inst-pill-divider {
         height: 24px;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(60px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
