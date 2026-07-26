@@ -1372,36 +1372,29 @@ body {
 .nav-brand {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.95); /* Unified bright background for readability */
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 999px;
-    padding: 2px 8px; /* Extra padding for breathing room */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 2px 5px rgba(255, 255, 255, 0.8);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.nav-brand:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255, 255, 255, 1);
+    gap: 12px; /* Space between the two chips */
 }
 
 .nav-logo-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 8px;
-    height: 40px;
-    transition: filter 0.3s ease, transform 0.3s ease;
+    height: 44px;
+    padding: 6px 16px;
+    border-radius: 12px; /* Modern rounded square */
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
 }
 
 .nav-logo-link:hover {
-    filter: brightness(1.1);
-    transform: scale(1.05);
+    transform: translateY(-3px) scale(1.02);
 }
 
+/* BRIN Logo Chip (Needs light background for black text) */
 .nav-logo-link.brin {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
 }
 
 .nav-logo-link.brin img {
@@ -1409,17 +1402,22 @@ body {
     width: auto;
 }
 
+/* Divider no longer needed, hide it if it exists in HTML */
 .nav-divider {
-    width: 2px;
-    height: 22px;
-    background: rgba(0, 0, 0, 0.15); /* Darker divider for light background */
-    margin: 0 6px;
-    border-radius: 2px;
+    display: none;
+}
+
+/* ITERA Logo Chip (Dark, sleek) */
+.nav-logo-link.itera {
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .nav-logo-link.itera img {
-    height: 30px;
+    height: 28px;
     width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 /* Nav Menu Buttons */
