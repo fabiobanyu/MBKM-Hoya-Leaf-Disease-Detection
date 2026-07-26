@@ -1476,7 +1476,7 @@ body {
 
 .page-section.active-page {
     display: block;
-    animation: fadeIn 0.4s ease-out forwards;
+    animation: fadeIn 0.8s ease-out forwards;
 }
 
 @keyframes fadeIn {

@@ -44,7 +44,12 @@ diseases = [
     {"en": "Powdery Mildew", "id": "Embun Tepung", "category": "Bercak Putih"},
     {"en": "Sooty Mold", "id": "Embun Jelaga", "category": "Bercak Bintik Hitam"},
     {"en": "Unspecified Fungal/Bacterial Leaf Spot", "id": "Bercak Daun Jamur/Bakteri Tidak Spesifik", "category": "Bercak Bintik Hitam"},
-    {"en": "Root Rot", "id": "Busuk Akar", "category": "Daun Layu"}
+    {"en": "Root Rot", "id": "Busuk Akar", "category": "Daun Layu"},
+    {"en": "Cercospora", "id": "Bercak Mata Katak", "category": "Bercak Cokelat"},
+    {"en": "Rust", "id": "Karat Daun", "category": "Bercak Cokelat"},
+    {"en": "Mealybugs", "id": "Kutu Putih", "category": "Bercak Putih"},
+    {"en": "Aphids", "id": "Kutu Daun", "category": "Daun Layu"},
+    {"en": "Spider Mites", "id": "Tungau Laba-laba", "category": "Bercak Bintik Hitam"}
 ]
 
 # ── Struktur Pengetahuan Relasional Bilingual ────────────────
