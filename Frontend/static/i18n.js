@@ -131,8 +131,54 @@ function applyTranslations(lang) {
         }
     });
     
+    // Handle dynamic tables (Disease & Species) with animation
+    if (typeof TABLE_DATA !== 'undefined') {
+        const diseaseTableBody = document.getElementById('diseaseTableBody');
+        const speciesTableBody = document.getElementById('speciesTableBody');
+        
+        // Add a simple fade transition
+        const tables = [diseaseTableBody, speciesTableBody].filter(Boolean);
+        tables.forEach(tbody => tbody.style.opacity = '0.3');
+        
+        setTimeout(() => {
+            renderDynamicTables(lang);
+            tables.forEach(tbody => {
+                tbody.style.transition = 'opacity 0.3s ease-in-out';
+                tbody.style.opacity = '1';
+            });
+        }, 150); // slight delay to make transition smooth
+    }
+    
     // Dispatch custom event so script.js can update dynamic parts
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
+}
+
+function renderDynamicTables(lang) {
+    if (typeof TABLE_DATA === 'undefined') return;
+    
+    const diseaseTableBody = document.getElementById('diseaseTableBody');
+    if (diseaseTableBody) {
+        diseaseTableBody.innerHTML = TABLE_DATA.diseases.map(d => `
+            <tr>
+                <td><strong>${lang === 'en' ? d.name_en : d.name_id}</strong></td>
+                <td>${lang === 'en' ? d.desc_en : d.desc_id}</td>
+                <td><span class="badge category-badge">${lang === 'en' ? d.ai_cat_en : d.ai_cat_id}</span></td>
+                <td><span class="badge ${d.severity_class}">${lang === 'en' ? d.severity_text_en : d.severity_text_id}</span></td>
+            </tr>
+        `).join('');
+    }
+    
+    const speciesTableBody = document.getElementById('speciesTableBody');
+    if (speciesTableBody) {
+        speciesTableBody.innerHTML = TABLE_DATA.species.map(s => `
+            <tr>
+                <td>${s.no}</td>
+                <td><strong>${s.name}</strong></td>
+                <td><span class="badge ${s.cat_class}">${lang === 'en' ? s.cat_en : s.cat_id}</span></td>
+                <td>${lang === 'en' ? s.desc_en : s.desc_id}</td>
+            </tr>
+        `).join('');
+    }
 }
 
 // Initialize on load
