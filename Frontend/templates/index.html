@@ -31,9 +31,15 @@
             
             <!-- Right: Menus -->
             <div class="nav-menu">
-                <button class="nav-btn active" id="navHomeBtn"><i class="fa-solid fa-house"></i> Beranda</button>
-                <button class="nav-btn" id="navDiseaseBtn"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
-                <button class="nav-btn" id="navSpeciesBtn"><i class="fa-solid fa-seedling"></i> 10 Spesies</button>
+                <button class="nav-btn active" id="navHomeBtn" data-i18n="nav_home"><i class="fa-solid fa-house"></i> Beranda</button>
+                <button class="nav-btn" id="navDiseaseBtn" data-i18n="nav_disease"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
+                <button class="nav-btn" id="navSpeciesBtn" data-i18n="nav_species"><i class="fa-solid fa-seedling"></i> 10 Spesies</button>
+                
+                <!-- Language Toggle -->
+                <div class="nav-divider" style="display: block; height: 28px; margin: auto 8px;"></div>
+                <button class="nav-btn" id="langToggleBtn" title="Switch Language" style="padding: 8px 12px; font-weight: 600;">
+                    <i class="fa-solid fa-globe"></i> <span id="currentLangText">ID</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -67,10 +73,10 @@
                     <!-- Upload Area -->
                     <div class="upload-area" id="dropZone">
                         <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
-                        <h3>Upload Hoya Leaf</h3>
-                        <p>Drag & drop your image here, or click to browse</p>
+                        <h3 data-i18n="upload_title">Upload Hoya Leaf</h3>
+                        <p data-i18n="upload_desc">Drag & drop your image here, or click to browse</p>
                         <input type="file" id="fileInput" accept="image/jpeg, image/png, image/jpg" hidden>
-                        <button class="btn primary-btn" id="browseBtn">Browse Files</button>
+                        <button class="btn primary-btn" id="browseBtn" data-i18n="upload_btn">Browse Files</button>
                     </div>
                     
                     <!-- Camera Area (Hidden initially) -->
@@ -90,7 +96,7 @@
                         <button class="shutter-btn" id="captureBtn">
                             <div class="shutter-inner"></div>
                         </button>
-                        <p class="camera-hint">Position the leaf in the frame and capture</p>
+                        <p class="camera-hint" data-i18n="camera_hint">Position the leaf in the frame and capture</p>
                     </div>
                     
                     <!-- Error Banner (hidden initially) -->
@@ -107,7 +113,7 @@
 
                     <!-- Preview area (hidden initially) -->
                     <div class="preview-area hidden" id="previewArea">
-                        <p class="crop-hint">
+                        <p class="crop-hint" data-i18n="crop_hint">
                             <i class="fa-solid fa-crop-simple"></i> Atur pemotong (crop) agar fokus <b>pada area daun utama</b>.
                         </p>
                         <div class="preview-image-frame">
@@ -137,9 +143,9 @@
                             <i class="fa-solid fa-seedling text-gradient"></i>
                         </div>
                         <div class="about-text">
-                            <h3>Tentang Hoya AI Vision</h3>
-                            <p><strong>Hoya AI Vision</strong> merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara <strong>BRIN</strong> (Badan Riset dan Inovasi Nasional) dan <strong>ITERA</strong> (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.</p>
-                            <p>Sistem ini diintegrasikan dengan <strong>Knowledge Graph (KG)</strong> yang mampu menyajikan informasi terstruktur dan komprehensif mengenai penanganan penyakit, penyebab, dan langkah preventif, membantu para peneliti maupun pembudidaya tanaman hias menjaga kesehatan tanaman Hoya dengan lebih presisi dan efisien.</p>
+                            <h3 data-i18n="about_title">Tentang Hoya AI Vision</h3>
+                            <p data-i18n="about_p1"><strong>Hoya AI Vision</strong> merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara <strong>BRIN</strong> (Badan Riset dan Inovasi Nasional) dan <strong>ITERA</strong> (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.</p>
+                            <p data-i18n="about_p2">Sistem ini diintegrasikan dengan <strong>Knowledge Graph (KG)</strong> yang mampu menyajikan informasi terstruktur dan komprehensif mengenai penanganan penyakit, penyebab, dan langkah preventif, membantu para peneliti maupun pembudidaya tanaman hias menjaga kesehatan tanaman Hoya dengan lebih presisi dan efisien.</p>
                         </div>
                     </div>
                 </section>
@@ -151,21 +157,21 @@
             <div id="diseaseInfoPage" class="page-section hidden">
 
                 <div class="content-header">
-                    <h2><i class="fa-solid fa-notes-medical text-gradient"></i> Informasi Gejala Penyakit Hoya</h2>
-                    <p>Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya. Penyakit-penyakit di bawah ini memiliki panduan penanganan lengkap dari Knowledge Graph yang akan muncul otomatis saat Anda scan daun.</p>
+                    <h2 data-i18n="disease_title"><i class="fa-solid fa-notes-medical text-gradient"></i> Informasi Gejala Penyakit Hoya</h2>
+                    <p data-i18n="disease_desc">Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya. Penyakit-penyakit di bawah ini memiliki panduan penanganan lengkap dari Knowledge Graph yang akan muncul otomatis saat Anda scan daun.</p>
                 </div>
                 
                 <div class="table-responsive glass-panel">
                     <table class="disease-table">
                         <thead>
                             <tr>
-                                <th>Jenis Penyakit</th>
-                                <th>Gejala Visual pada Daun</th>
-                                <th>Kategori AI</th>
-                                <th>Keparahan</th>
+                                <th data-i18n="th_disease_name">Jenis Penyakit</th>
+                                <th data-i18n="th_disease_symp">Gejala Visual pada Daun</th>
+                                <th data-i18n="th_disease_ai">Kategori AI</th>
+                                <th data-i18n="th_disease_sev">Keparahan</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="diseaseTableBody">
                             <tr>
                                 <td><strong>Bercak Mata Katak (Cercospora)</strong></td>
                                 <td>Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah dengan tepi berwarna cokelat kemerahan atau ungu.</td>
@@ -273,18 +279,18 @@
             <div id="speciesInfoPage" class="page-section hidden">
 
                 <div class="content-header">
-                    <h2><i class="fa-solid fa-seedling text-gradient"></i> 10 Spesies Hoya yang Teridentifikasi</h2>
-                    <p>Berikut adalah 10 spesies tanaman Hoya yang dapat diidentifikasi oleh sistem AI kami, beserta informasi kategori pemanfaatannya berdasarkan Knowledge Graph (KG).</p>
+                    <h2 data-i18n="species_title"><i class="fa-solid fa-seedling text-gradient"></i> 10 Spesies Tanaman Hoya</h2>
+                    <p data-i18n="species_desc">Daftar 10 spesies Hoya yang saat ini dikenali oleh model AI kami beserta karakteristik bentuk daun dan habitat aslinya.</p>
                 </div>
                 
                 <div class="table-responsive glass-panel">
-                    <table class="species-table">
+                    <table class="disease-table species-table">
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama Spesies</th>
-                                <th>Kategori Pemanfaatan</th>
-                                <th>Deskripsi Singkat</th>
+                                <th data-i18n="th_species_no">No</th>
+                                <th data-i18n="th_species_name">Nama Spesies</th>
+                                <th data-i18n="th_species_cat">Kategori Pemanfaatan</th>
+                                <th data-i18n="th_species_desc">Deskripsi Singkat</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -454,9 +460,9 @@
         <footer>
             <p>Hoya Vision Web Evaluation &bull; Powered by Deep Learning</p>
         </footer>
-    </div>
-
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="{{ url_for('static', filename='i18n.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}?v=4"></script>
 </body>
 </html>

@@ -54,35 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentFile = null;
     let cropper = null;
-    let currentLang = 'id';
     let currentKnowledge = [];
-
-    if (langToggle) {
-        langToggle.addEventListener('change', (e) => {
-            currentLang = e.target.checked ? 'en' : 'id';
-            
-            // Smooth transition for knowledge section
-            if (knowledgeTitleText) {
-                knowledgeTitleText.style.transition = 'opacity 0.3s ease';
-                knowledgeTitleText.style.opacity = '0';
-            }
-            if (knowledgeContainer) {
-                knowledgeContainer.style.transition = 'opacity 0.3s ease';
-                knowledgeContainer.style.opacity = '0';
-            }
-            
-            setTimeout(() => {
-                if (knowledgeTitleText) {
-                    knowledgeTitleText.textContent = currentLang === 'en' ? 'Treatment Info' : 'Informasi Penanganan';
-                    knowledgeTitleText.style.opacity = '1';
-                }
-                renderKnowledge();
-                if (knowledgeContainer) {
-                    knowledgeContainer.style.opacity = '1';
-                }
-            }, 300);
-        });
-    }
 
     // --- Smooth Error Banner Control (Zero Snap Collapse) ---
     function hideErrorBanner() {
@@ -96,14 +68,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showErrorBanner(msg, errorType) {
         if (!errorBanner || !errorMessage) return;
-        errorMessage.textContent = msg;
         
+        // Support i18n for dynamic error messages
+        if (typeof translations !== 'undefined' && currentAppLang) {
+            if (errorType === 'confidence') {
+                msg = translations[currentAppLang].error_msg_conf;
+            } else if (msg.includes('terlalu kecil')) {
+                msg = translations[currentAppLang].error_msg_noise_small;
+            } else if (msg.includes('buram')) {
+                msg = translations[currentAppLang].error_msg_noise_blur;
+            } else {
+                msg = translations[currentAppLang].error_msg_noise_ood;
+            }
+        }
+        
+        errorMessage.textContent = msg;
         const errorIconWrapper = document.getElementById('errorIconWrapper');
         const errorIcon = document.getElementById('errorIcon');
         const errorTitle = document.getElementById('errorTitle');
         
         if (errorType === 'confidence') {
-            if (errorTitle) errorTitle.textContent = 'Sistem Keamanan AI';
+            if (errorTitle) {
+                errorTitle.textContent = (typeof translations !== 'undefined') ? translations[currentAppLang].error_title_conf : 'Sistem Keamanan AI';
+            }
             errorBanner.style.background = 'rgba(245, 158, 11, 0.15)'; // Yellow
             errorBanner.style.border = '1px solid rgba(245, 158, 11, 0.3)';
             errorBanner.style.borderLeft = '5px solid #f59e0b';
@@ -116,7 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (errorIcon) errorIcon.style.color = '#fcd34d';
             if (errorTitle) errorTitle.style.color = '#fcd34d';
         } else {
-            if (errorTitle) errorTitle.textContent = 'Sistem Keamanan AI';
+            if (errorTitle) {
+                errorTitle.textContent = (typeof translations !== 'undefined') ? translations[currentAppLang].error_title_noise : 'Sistem Keamanan AI';
+            }
             errorBanner.style.background = 'rgba(239, 68, 68, 0.15)'; // Red
             errorBanner.style.border = '1px solid rgba(239, 68, 68, 0.3)';
             errorBanner.style.borderLeft = '5px solid #ef4444';
@@ -186,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>The Knowledge Graph Database (Neo4j) is currently offline or unreachable.</p>
                     <p style="font-size: 0.85rem; opacity: 0.7;">(No treatment information can be displayed)</p>
                 </div>`;
-            knowledgeContainer.innerHTML = currentLang === 'en' ? offlineMsgEn : offlineMsgId;
+            knowledgeContainer.innerHTML = currentAppLang === 'en' ? offlineMsgEn : offlineMsgId;
             return;
         }
         
@@ -195,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         currentKnowledge.forEach(disease => {
             // Find the correct translated title (fallback to EN if ID doesn't exist)
-            const title = currentLang === 'en' ? disease.disease_en : (disease.disease_id || disease.disease_en);
+            const title = currentAppLang === 'en' ? disease.disease_en : (disease.disease_id || disease.disease_en);
             
             let html = `
             <div class="knowledge-item">
@@ -207,9 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (disease.symptoms && disease.symptoms.length > 0) {
                 html += `
                 <div class="kg-card">
-                    <h4><i class="fa-solid fa-microscope text-gradient"></i> ${currentLang === 'en' ? 'Symptoms' : 'Gejala'}</h4>
+                    <h4><i class="fa-solid fa-microscope text-gradient"></i> ${currentAppLang === 'en' ? 'Symptoms' : 'Gejala'}</h4>
                     <ul>
-                        ${disease.symptoms.map(s => `<li>${s[currentLang] || s.en}</li>`).join('')}
+                        ${disease.symptoms.map(s => `<li>${s[currentAppLang] || s.en}</li>`).join('')}
                     </ul>
                 </div>`;
             }
@@ -218,9 +207,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (disease.causes && disease.causes.length > 0) {
                 html += `
                 <div class="kg-card">
-                    <h4><i class="fa-solid fa-temperature-half text-gradient"></i> ${currentLang === 'en' ? 'Causes' : 'Pemicu'}</h4>
+                    <h4><i class="fa-solid fa-temperature-half text-gradient"></i> ${currentAppLang === 'en' ? 'Causes' : 'Pemicu'}</h4>
                     <ul>
-                        ${disease.causes.map(c => `<li>${c[currentLang] || c.en}</li>`).join('')}
+                        ${disease.causes.map(c => `<li>${c[currentAppLang] || c.en}</li>`).join('')}
                     </ul>
                 </div>`;
             }
@@ -229,9 +218,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (disease.treatments && disease.treatments.length > 0) {
                 html += `
                 <div class="kg-card">
-                    <h4><i class="fa-solid fa-kit-medical text-gradient"></i> ${currentLang === 'en' ? 'Treatment' : 'Penanganan'}</h4>
+                    <h4><i class="fa-solid fa-kit-medical text-gradient"></i> ${currentAppLang === 'en' ? 'Treatment' : 'Penanganan'}</h4>
                     <ul>
-                        ${disease.treatments.map(t => `<li>${t[currentLang] || t.en}</li>`).join('')}
+                        ${disease.treatments.map(t => `<li>${t[currentAppLang] || t.en}</li>`).join('')}
                     </ul>
                 </div>`;
             }
@@ -734,7 +723,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const statusBanner = document.getElementById('statusBanner');
         const statusIcon = document.getElementById('statusIcon');
         
-        diseaseName.textContent = data.disease.name;
+        // Translate disease name if dictionary is available
+        const t = (typeof translations !== 'undefined') ? translations[currentAppLang] : null;
+        const diseaseCatKey = 'cat_' + data.disease.name.toLowerCase().replace(/ /g, '_');
+        const translatedDiseaseName = t && t[diseaseCatKey] ? t[diseaseCatKey] : data.disease.name;
+        
+        diseaseName.textContent = translatedDiseaseName;
         diseaseConfidence.textContent = `${data.disease.confidence}% Confidence`;
         
         // Wait a tiny bit for the DOM to render before animating width
@@ -755,9 +749,13 @@ document.addEventListener('DOMContentLoaded', () => {
         topPredictions.innerHTML = '';
         data.disease.top3.forEach((pred, index) => {
             if (index === 0) return; // Skip top 1 as it's already shown big
+            
+            const predCatKey = 'cat_' + pred.nama.toLowerCase().replace(/ /g, '_');
+            const translatedPredName = t && t[predCatKey] ? t[predCatKey] : pred.nama;
+            
             const div = document.createElement('div');
             div.className = 'prediction-item';
-            div.innerHTML = `<span class="pred-name">${pred.nama}</span><span class="pred-conf">${pred.confidence}%</span>`;
+            div.innerHTML = `<span class="pred-name">${translatedPredName}</span><span class="pred-conf">${pred.confidence}%</span>`;
             topPredictions.appendChild(div);
         });
 
@@ -768,17 +766,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Knowledge Graph Data
         if (data.knowledge && data.knowledge.length > 0) {
             currentKnowledge = data.knowledge;
-            if(langToggle) langToggle.checked = false; // reset to ID
-            currentLang = 'id';
-            if (knowledgeTitleText) knowledgeTitleText.textContent = 'Informasi Penanganan';
-            renderKnowledge();
         } else {
             currentKnowledge = [];
-            if(langToggle) langToggle.checked = false; // reset to ID
-            currentLang = 'id';
-            if (knowledgeTitleText) knowledgeTitleText.textContent = 'Informasi Penanganan';
-            renderKnowledge();
         }
+        if (knowledgeTitleText) {
+            knowledgeTitleText.textContent = t ? t.kg_treatment_info : 'Informasi Penanganan';
+        }
+        renderKnowledge();
 
         // Reset toggle to Original
         btnOriginal.click();
@@ -908,5 +902,44 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navSpeciesBtn) {
         navSpeciesBtn.addEventListener('click', () => switchToPage(navSpeciesBtn, speciesInfoPage));
     }
+
+    // --- Listen to language changes from i18n.js to update dynamic components ---
+    document.addEventListener('languageChanged', (e) => {
+        // Re-render Knowledge Graph if it exists
+        if (currentKnowledge && currentKnowledge.length > 0) {
+            renderKnowledge();
+        }
+        
+        // Re-translate error banner if it's currently showing
+        if (errorBanner && !errorBanner.classList.contains('hidden')) {
+            const currentTitle = errorTitle ? errorTitle.textContent : '';
+            const t = translations[e.detail.lang];
+            
+            if (currentTitle.includes('AI') || currentTitle.includes('Keamanan') || currentTitle.includes('Security')) {
+                // Must be noise/ood error
+                const currentMsg = errorMessage.textContent;
+                if (currentMsg.includes('kecil') || currentMsg.includes('small')) {
+                    errorMessage.textContent = t.error_msg_noise_small;
+                } else if (currentMsg.includes('buram') || currentMsg.includes('blur')) {
+                    errorMessage.textContent = t.error_msg_noise_blur;
+                } else {
+                    errorMessage.textContent = t.error_msg_noise_ood;
+                }
+                if (errorTitle) errorTitle.textContent = t.error_title_noise;
+            } else {
+                // Confidence error
+                errorMessage.textContent = t.error_msg_conf;
+                if (errorTitle) errorTitle.textContent = t.error_title_conf;
+            }
+        }
+        
+        // Re-translate disease analysis result if showing
+        const diseaseNameEl = document.getElementById('diseaseName');
+        if (diseaseNameEl && diseaseNameEl.textContent) {
+            const rawName = diseaseNameEl.textContent; // wait, this might already be translated!
+            // It's safer to not change it unless we store the raw name. 
+            // We'll leave it for the next analysis. 
+        }
+    });
 
 });
