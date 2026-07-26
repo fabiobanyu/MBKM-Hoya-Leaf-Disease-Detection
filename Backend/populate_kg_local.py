@@ -177,6 +177,84 @@ knowledge = {
             {"id": "Tanam ulang di media porous dengan drainase baik", "en": "Repot in porous mix with good drainage"},
             {"id": "Siram hanya saat media benar-benar kering", "en": "Water only when the mix is completely dry"}
         ]
+    },
+    "Cercospora": {
+        "symptoms": [
+            {"id": "Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah", "en": "Gray lesions or small spots in the center"},
+            {"id": "Tepi bintik berwarna cokelat kemerahan atau ungu", "en": "Reddish-brown or purple edges around spots"}
+        ],
+        "causes": [
+            {"id": "Kelembapan berlebihan di udara", "en": "Excessive air humidity"},
+            {"id": "Sirkulasi udara buruk", "en": "Poor air circulation"}
+        ],
+        "treatments": [
+            {"id": "Isolasi tanaman dan potong daun sakit", "en": "Isolate plant and cut sick leaves"},
+            {"id": "Semprot dengan fungisida tembaga", "en": "Spray with copper fungicide"},
+            {"id": "Hindari membasahi daun saat menyiram", "en": "Avoid wetting leaves during watering"}
+        ]
+    },
+    "Rust": {
+        "symptoms": [
+            {"id": "Terdapat pustul atau bintik menonjol di daun", "en": "Pustules or raised spots on leaves"},
+            {"id": "Berwarna oranye, merah karat, atau cokelat", "en": "Orange, rust-red, or brown color"}
+        ],
+        "causes": [
+            {"id": "Suhu hangat dengan kelembapan tinggi", "en": "Warm temperature with high humidity"},
+            {"id": "Terpapar tanaman terinfeksi jamur karat", "en": "Exposure to plants infected with rust fungi"}
+        ],
+        "treatments": [
+            {"id": "Segera buang daun yang terinfeksi", "en": "Immediately discard infected leaves"},
+            {"id": "Jaga daun tetap kering", "en": "Keep leaves dry"},
+            {"id": "Beri fungisida berbahan aktif sulfur atau tembaga", "en": "Apply sulfur or copper-based fungicide"}
+        ]
+    },
+    "Mealybugs": {
+        "symptoms": [
+            {"id": "Bercak putih seperti kapas di sela daun atau batang", "en": "White cotton-like spots in leaf axils or stems"},
+            {"id": "Daun terlihat kusam dan layu", "en": "Leaves look dull and wilted"},
+            {"id": "Terasa lengket (embun madu) dan sering mengundang semut", "en": "Sticky feeling (honeydew) and attracts ants"}
+        ],
+        "causes": [
+            {"id": "Lingkungan kering dan hangat", "en": "Dry and warm environment"},
+            {"id": "Tertular dari tanaman baru", "en": "Contagion from new plants"}
+        ],
+        "treatments": [
+            {"id": "Bersihkan hama dengan kapas beralkohol (70%)", "en": "Clean pests with 70% alcohol cotton swabs"},
+            {"id": "Gunakan sabun insektisida atau neem oil", "en": "Use insecticidal soap or neem oil"},
+            {"id": "Rutin periksa ketiak daun", "en": "Regularly inspect leaf axils"}
+        ]
+    },
+    "Aphids": {
+        "symptoms": [
+            {"id": "Serangga kecil bergerombol di pucuk daun muda", "en": "Small insects clustering on new shoots"},
+            {"id": "Daun mengeriting dan berubah bentuk", "en": "Curling and deformed leaves"},
+            {"id": "Pertumbuhan tanaman terhambat", "en": "Stunted plant growth"}
+        ],
+        "causes": [
+            {"id": "Perkembangbiakan hama sangat cepat", "en": "Very rapid pest multiplication"},
+            {"id": "Terbawa angin atau semut", "en": "Carried by wind or ants"}
+        ],
+        "treatments": [
+            {"id": "Semprot dengan aliran air kuat untuk menjatuhkan hama", "en": "Spray with strong water jet to dislodge pests"},
+            {"id": "Semprotkan minyak mimba (neem oil)", "en": "Spray neem oil"},
+            {"id": "Beri pupuk berimbang agar tanaman tahan stres", "en": "Apply balanced fertilizer for stress resistance"}
+        ]
+    },
+    "Spider Mites": {
+        "symptoms": [
+            {"id": "Daun memiliki bintik-bintik kuning kecil dan kusam", "en": "Leaves have small dull yellow spots"},
+            {"id": "Terlihat jaring halus di sekitar pangkal daun", "en": "Fine webbing visible near leaf bases"},
+            {"id": "Daun menguning dan rontok prematur", "en": "Premature yellowing and leaf drop"}
+        ],
+        "causes": [
+            {"id": "Udara ruangan sangat panas dan kering", "en": "Very hot and dry indoor air"},
+            {"id": "Kurang penyiraman", "en": "Underwatering"}
+        ],
+        "treatments": [
+            {"id": "Lap daun dengan kain lembap", "en": "Wipe leaves with a damp cloth"},
+            {"id": "Tingkatkan kelembapan sekitar tanaman", "en": "Increase humidity around the plant"},
+            {"id": "Gunakan mitisida jika serangan parah", "en": "Use miticide if infestation is severe"}
+        ]
     }
 }
 
