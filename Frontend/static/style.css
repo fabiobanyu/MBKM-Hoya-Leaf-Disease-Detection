@@ -1504,6 +1504,118 @@ body {
 .active-page .disease-table tbody tr:nth-child(9) { animation-delay: 1.65s; }
 .active-page .disease-table tbody tr:nth-child(10) { animation-delay: 1.80s; }
 .active-page .disease-table tbody tr:nth-child(11) { animation-delay: 1.95s; }
+.active-page .disease-table tbody tr:nth-child(12) { animation-delay: 2.10s; }
+.active-page .disease-table tbody tr:nth-child(13) { animation-delay: 2.25s; }
+.active-page .disease-table tbody tr:nth-child(14) { animation-delay: 2.40s; }
+.active-page .disease-table tbody tr:nth-child(15) { animation-delay: 2.55s; }
+.active-page .disease-table tbody tr:nth-child(16) { animation-delay: 2.70s; }
+
+/* Staggered Animations for Species Info Page */
+.active-page .species-table thead { opacity: 0; animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards; }
+
+.active-page .species-table tbody tr { opacity: 0; animation: fadeInUp 1.0s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.active-page .species-table tbody tr:nth-child(1) { animation-delay: 0.45s; }
+.active-page .species-table tbody tr:nth-child(2) { animation-delay: 0.60s; }
+.active-page .species-table tbody tr:nth-child(3) { animation-delay: 0.75s; }
+.active-page .species-table tbody tr:nth-child(4) { animation-delay: 0.90s; }
+.active-page .species-table tbody tr:nth-child(5) { animation-delay: 1.05s; }
+.active-page .species-table tbody tr:nth-child(6) { animation-delay: 1.20s; }
+.active-page .species-table tbody tr:nth-child(7) { animation-delay: 1.35s; }
+.active-page .species-table tbody tr:nth-child(8) { animation-delay: 1.50s; }
+.active-page .species-table tbody tr:nth-child(9) { animation-delay: 1.65s; }
+.active-page .species-table tbody tr:nth-child(10) { animation-delay: 1.80s; }
+
+/* Species Table Styling (same base as disease-table) */
+.species-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+.species-table thead th {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.species-table tbody td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    vertical-align: top;
+    line-height: 1.6;
+}
+
+.species-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.species-table tbody td:first-child {
+    text-align: center;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+    width: 50px;
+}
+
+/* Species category badges container — add spacing between badges */
+.species-table tbody td:nth-child(3) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+/* Badge Styles for Category and Species */
+.badge.category-badge {
+    background: rgba(100, 149, 237, 0.2);
+    color: #89b4fa;
+    border: 1px solid rgba(100, 149, 237, 0.3);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge.species-hias {
+    background: rgba(46, 204, 113, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(46, 204, 113, 0.25);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge.species-obat {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* KG Badge — small indicator for Knowledge Graph linked diseases */
+.badge.kg-badge {
+    background: rgba(250, 204, 21, 0.15);
+    color: #fde68a;
+    border: 1px solid rgba(250, 204, 21, 0.3);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    margin-left: 6px;
+}
 
 /* ============================================
    About Box Section

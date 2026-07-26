@@ -33,7 +33,7 @@
             <div class="nav-menu">
                 <button class="nav-btn active" id="navHomeBtn"><i class="fa-solid fa-house"></i> Beranda</button>
                 <button class="nav-btn" id="navDiseaseBtn"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
-                <button class="nav-btn disabled" id="navSpeciesBtn" title="Segera Hadir"><i class="fa-solid fa-seedling"></i> 10 Spesies (Segera)</button>
+                <button class="nav-btn" id="navSpeciesBtn"><i class="fa-solid fa-seedling"></i> 10 Spesies</button>
             </div>
         </div>
     </nav>
@@ -152,7 +152,7 @@
 
                 <div class="content-header">
                     <h2><i class="fa-solid fa-notes-medical text-gradient"></i> Informasi Gejala Penyakit Hoya</h2>
-                    <p>Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya agar penanganan dapat dilakukan secara dini dan akurat.</p>
+                    <p>Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya. Penyakit bertanda <strong>KG</strong> memiliki data penanganan lengkap dari Knowledge Graph yang akan muncul otomatis saat Anda scan daun.</p>
                 </div>
                 
                 <div class="table-responsive glass-panel">
@@ -161,64 +161,192 @@
                             <tr>
                                 <th>Jenis Penyakit</th>
                                 <th>Gejala Visual pada Daun</th>
-                                <th>Tingkat Keparahan</th>
+                                <th>Kategori AI</th>
+                                <th>Keparahan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td><strong>Bercak Mata Katak (Cercospora)</strong></td>
                                 <td>Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah dengan tepi berwarna cokelat kemerahan atau ungu.</td>
+                                <td><span class="badge category-badge">—</span></td>
                                 <td><span class="badge info">Rendah</span></td>
                             </tr>
                             <tr>
-                                <td><strong>Bercak Daun Jamur (Fungal Leaf Spot)</strong></td>
-                                <td>Bercak-bercak melingkar berwarna cokelat atau hitam, terkadang memiliki halo (lingkaran tepi) berwarna kuning. Daun bisa menguning dan gugur jika dibiarkan.</td>
+                                <td><strong>Embun Tepung (Powdery Mildew)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Bercak putih seperti tepung yang meluas menutupi daun dan batang, daun menggulung, pertumbuhan melambat.</td>
+                                <td><span class="badge category-badge">Bercak Putih</span></td>
+                                <td><span class="badge info">Rendah</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Embun Jelaga (Sooty Mold)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Lapisan hitam seperti jelaga pada daun dan batang, mudah terhapus dengan kain lembap, residu lengket sebelum jelaga muncul.</td>
+                                <td><span class="badge category-badge">Bercak Bintik Hitam</span></td>
+                                <td><span class="badge info">Rendah</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bercak Daun Jamur/Bakteri (Leaf Spot)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Bercak cokelat/hitam bulat pada permukaan daun, kadang disertai halo kuning di sekeliling bercak.</td>
+                                <td><span class="badge category-badge">Bercak Bintik Hitam</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Bercak Cokelat (Brown Spots)</strong></td>
                                 <td>Terdapat bercak-bercak berwarna cokelat pada permukaan daun. Biasanya disebabkan oleh infeksi jamur atau kondisi kelembapan yang terlalu tinggi.</td>
+                                <td><span class="badge category-badge">Bercak Cokelat</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Bercak Putih (White Spots)</strong></td>
                                 <td>Bercak putih menyerupai tepung atau jamur pada daun. Sering kali disebabkan oleh embun tepung (powdery mildew) atau hama tertentu.</td>
+                                <td><span class="badge category-badge">Bercak Putih</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
-                                <td><strong>Bercak Bintik Hitam (Black Spot Disease)</strong></td>
+                                <td><strong>Bercak Bintik Hitam (Black Spot)</strong></td>
                                 <td>Bintik-bintik hitam kecil yang menyebar di permukaan daun. Dapat menyebabkan daun menguning dan gugur secara prematur.</td>
+                                <td><span class="badge category-badge">Bercak Bintik Hitam</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Karat Daun (Rust)</strong></td>
                                 <td>Terdapat pustul atau bintik menonjol berwarna oranye, merah karat, atau cokelat di permukaan bawah atau atas daun.</td>
+                                <td><span class="badge category-badge">—</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Kutu Putih (Mealybugs)</strong></td>
                                 <td>Bercak putih seperti kapas di sela-sela daun atau batang. Daun terlihat kusam, lengket (embun madu), dan berdebu hitam (jamur jelaga).</td>
+                                <td><span class="badge category-badge">—</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Kutu Daun (Aphids)</strong></td>
                                 <td>Serangga kecil yang berkumpul di pucuk daun muda. Dapat menyebabkan daun mengeriting dan pertumbuhan tanaman terhambat.</td>
+                                <td><span class="badge category-badge">—</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Tungau Laba-laba (Spider Mites)</strong></td>
                                 <td>Daun terlihat memiliki bintik-bintik kuning kecil dan kusam. Terlihat adanya jaring halus di sekitar pangkal daun jika sudah parah.</td>
+                                <td><span class="badge category-badge">—</span></td>
                                 <td><span class="badge warning">Sedang</span></td>
                             </tr>
                             <tr>
-                                <td><strong>Busuk Akar / Pangkal (Root Rot)</strong></td>
-                                <td>Daun terlihat layu, keriput, atau menguning dari pangkal meskipun media tanam basah. Terlihat bercak gelap di area pangkal daun.</td>
+                                <td><strong>Busuk Abu-abu (Botrytis Blight)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Bercak abu-abu/cokelat berair pada daun, daun lunak dan membusuk, muncul jamur putih/abu-abu/cokelat gelap, batang dan bunga ikut layu.</td>
+                                <td><span class="badge category-badge">Bercak Cokelat</span></td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Antraknosa (Anthracnose / Leaf Spot)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Bercak kecil yang membesar dan bertambah banyak, berkembang dari kuning menjadi cokelat hingga lesi cekung gelap, kadang disertai halo kuning.</td>
+                                <td><span class="badge category-badge">Bercak Cokelat</span></td>
+                                <td><span class="badge warning">Sedang</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hawar Bakteri (Bacterial Blight)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Bercak kecil berair (water-soaked spots) yang membesar menjadi area cokelat nekrotik, muncul cairan lengket (ooze) pada kondisi lembap.</td>
+                                <td><span class="badge category-badge">Bercak Cokelat</span></td>
+                                <td><span class="badge danger">Tinggi</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Busuk Akar (Root Rot)</strong> <span class="badge kg-badge">KG</span></td>
+                                <td>Daun menguning dan layu terasa lunak, batang lembek dekat media tanam, akar berubah abu-abu/cokelat/hitam dan lembek, bau apek/busuk dari media tanam.</td>
+                                <td><span class="badge category-badge">Daun Layu</span></td>
                                 <td><span class="badge danger">Tinggi</span></td>
                             </tr>
                             <tr>
                                 <td><strong>Daun Layu (Wilting Leaves)</strong></td>
                                 <td>Daun terlihat kehilangan turgor (kekakuan), keriput, atau menguning. Bisa mengindikasikan masalah pada akar, seperti busuk akar (root rot) atau kekurangan/kelebihan air.</td>
+                                <td><span class="badge category-badge">Daun Layu</span></td>
                                 <td><span class="badge danger">Tinggi</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 PAGE 3: INFORMASI 10 SPESIES HOYA
+                 ========================================== -->
+            <div id="speciesInfoPage" class="page-section hidden">
+
+                <div class="content-header">
+                    <h2><i class="fa-solid fa-seedling text-gradient"></i> 10 Spesies Hoya yang Teridentifikasi</h2>
+                    <p>Berikut adalah 10 spesies tanaman Hoya yang dapat diidentifikasi oleh sistem AI kami, beserta informasi kategori pemanfaatannya berdasarkan Knowledge Graph (KG).</p>
+                </div>
+                
+                <div class="table-responsive glass-panel">
+                    <table class="species-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Spesies</th>
+                                <th>Kategori Pemanfaatan</th>
+                                <th>Deskripsi Singkat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>Hoya Macrophylla</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span></td>
+                                <td>Dikenal dengan daun besarnya yang tebal dan berurat indah. Cocok sebagai tanaman gantung dekoratif di dalam ruangan.</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>Hoya Wayeti</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span></td>
+                                <td>Memiliki daun ramping memanjang dan bunga berwarna merah muda keunguan. Mudah dirawat dan populer di kalangan kolektor.</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>Hoya australis</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span> <span class="badge species-obat">Tanaman Obat</span></td>
+                                <td>Spesies asal Australia yang cepat tumbuh. Selain sebagai tanaman hias, secara tradisional digunakan dalam pengobatan herbal.</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>Hoya callistophylla</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span></td>
+                                <td>Terkenal karena pola urat daun yang sangat kontras dan artistik menyerupai motif batik. Sangat dicari kolektor.</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>Hoya finlaysonii</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span> <span class="badge species-obat">Tanaman Obat</span></td>
+                                <td>Memiliki daun bertekstur unik dengan urat yang menonjol. Digunakan secara tradisional untuk pengobatan di beberapa daerah Asia Tenggara.</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>Hoya imperialis</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span></td>
+                                <td>Spesies Hoya terbesar dengan bunga berdiameter hingga 8 cm dan beraroma harum. Dijuluki "Ratu Hoya".</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><strong>Hoya kerrii</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span> <span class="badge species-obat">Tanaman Obat</span></td>
+                                <td>Dikenal sebagai "Sweetheart Hoya" karena bentuk daunnya yang menyerupai hati. Populer sebagai hadiah Valentine dan memiliki khasiat obat tradisional.</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><strong>Hoya lacunosa</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span> <span class="badge species-obat">Tanaman Obat</span></td>
+                                <td>Spesies kecil yang harum semerbak terutama di malam hari. Getah daunnya digunakan secara tradisional untuk mengobati luka ringan.</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><strong>Hoya pubicalyx</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span></td>
+                                <td>Salah satu spesies Hoya paling mudah dirawat. Memiliki bunga berwarna merah muda hingga ungu tua berbentuk bintang.</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><strong>Hoya carnosa</strong></td>
+                                <td><span class="badge species-hias">Tanaman Hias</span> <span class="badge species-obat">Tanaman Obat</span></td>
+                                <td>Spesies Hoya paling klasik dan populer. Dikenal memiliki daun tebal berlilin dan bunga berbentuk bintang beraroma manis. Digunakan dalam pengobatan tradisional Tiongkok.</td>
                             </tr>
                         </tbody>
                     </table>

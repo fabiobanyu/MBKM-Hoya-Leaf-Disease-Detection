@@ -864,39 +864,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // --- Navigation Logic ---
-    if (navHomeBtn && navDiseaseBtn) {
-        navHomeBtn.addEventListener('click', () => {
-            navHomeBtn.classList.add('active');
-            navDiseaseBtn.classList.remove('active');
-            
-            // Instantly prepare home page for display to avoid clashing transitions
-            resetToHome(true); 
-            
-            diseaseInfoPage.classList.add('hidden');
-            diseaseInfoPage.classList.remove('active-page');
-            
-            homePage.classList.remove('hidden');
-            // Slight delay to allow display block to apply before opacity transition
-            setTimeout(() => homePage.classList.add('active-page'), 10);
-        });
-        
-        navDiseaseBtn.addEventListener('click', () => {
-            navDiseaseBtn.classList.add('active');
-            navHomeBtn.classList.remove('active');
-            
-            // Hide camera if active
-            stopCamera();
-            
-            // Hide all sections in home page
-            transitionTo([uploadPanel, previewArea, loadingSection, resultsSection, knowledgeSection, historySection], []);
-            
-            homePage.classList.add('hidden');
-            homePage.classList.remove('active-page');
-            
-            diseaseInfoPage.classList.remove('hidden');
-            setTimeout(() => diseaseInfoPage.classList.add('active-page'), 10);
-        });
-        
+    const navSpeciesBtn = document.getElementById('navSpeciesBtn');
+    const speciesInfoPage = document.getElementById('speciesInfoPage');
+    const allNavBtns = [navHomeBtn, navDiseaseBtn, navSpeciesBtn];
+    const allPages = [homePage, diseaseInfoPage, speciesInfoPage];
 
+    function switchToPage(activeBtn, activePage) {
+        // Update nav buttons
+        allNavBtns.forEach(btn => { if(btn) btn.classList.remove('active'); });
+        if(activeBtn) activeBtn.classList.add('active');
+
+        // Stop camera if leaving home
+        if (activePage !== homePage) stopCamera();
+
+        // If going home, instantly reset
+        if (activePage === homePage) {
+            resetToHome(true);
+        } else {
+            // Hide internal sections when leaving home
+            transitionTo([uploadPanel, previewArea, loadingSection, resultsSection, knowledgeSection, historySection], []);
+        }
+
+        // Switch pages
+        allPages.forEach(page => {
+            if (page) {
+                page.classList.add('hidden');
+                page.classList.remove('active-page');
+            }
+        });
+
+        if (activePage) {
+            activePage.classList.remove('hidden');
+            setTimeout(() => activePage.classList.add('active-page'), 10);
+        }
     }
+
+    if (navHomeBtn) {
+        navHomeBtn.addEventListener('click', () => switchToPage(navHomeBtn, homePage));
+    }
+    if (navDiseaseBtn) {
+        navDiseaseBtn.addEventListener('click', () => switchToPage(navDiseaseBtn, diseaseInfoPage));
+    }
+    if (navSpeciesBtn) {
+        navSpeciesBtn.addEventListener('click', () => switchToPage(navSpeciesBtn, speciesInfoPage));
+    }
+
 });
