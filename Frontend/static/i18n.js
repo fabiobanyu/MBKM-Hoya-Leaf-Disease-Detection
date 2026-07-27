@@ -158,14 +158,25 @@ function renderDynamicTables(lang) {
     
     const diseaseTableBody = document.getElementById('diseaseTableBody');
     if (diseaseTableBody) {
-        diseaseTableBody.innerHTML = TABLE_DATA.diseases.map(d => `
+        diseaseTableBody.innerHTML = TABLE_DATA.diseases.map(d => {
+            let typeBadge = '';
+            if (d.type === 'pest') {
+                typeBadge = `<br><span class="badge" style="background: rgba(234,179,8,0.2); color: #fde047; margin-top: 6px; display: inline-block; font-size: 0.75rem;"><i class="fa-solid fa-bug"></i> ${lang === 'en' ? 'Pest' : 'Hama'}</span>`;
+            } else if (d.type === 'category') {
+                typeBadge = `<br><span class="badge" style="background: rgba(148,163,184,0.2); color: #cbd5e1; margin-top: 6px; display: inline-block; font-size: 0.75rem;"><i class="fa-solid fa-layer-group"></i> ${lang === 'en' ? 'General Category' : 'Kategori Umum'}</span>`;
+            } else {
+                typeBadge = `<br><span class="badge" style="background: rgba(168,85,247,0.2); color: #c084fc; margin-top: 6px; display: inline-block; font-size: 0.75rem;"><i class="fa-solid fa-virus"></i> ${lang === 'en' ? 'Disease' : 'Penyakit'}</span>`;
+            }
+            
+            return `
             <tr>
-                <td><strong>${lang === 'en' ? d.name_en : d.name_id}</strong></td>
+                <td><strong>${lang === 'en' ? d.name_en : d.name_id}</strong>${typeBadge}</td>
                 <td>${lang === 'en' ? d.desc_en : d.desc_id}</td>
                 <td><span class="badge category-badge">${lang === 'en' ? d.ai_cat_en : d.ai_cat_id}</span></td>
                 <td><span class="badge ${d.severity_class}">${lang === 'en' ? d.severity_text_en : d.severity_text_id}</span></td>
             </tr>
-        `).join('');
+        `;
+        }).join('');
     }
     
     const speciesTableBody = document.getElementById('speciesTableBody');

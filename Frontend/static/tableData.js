@@ -1,41 +1,9 @@
 const TABLE_DATA = {
     "diseases": [
         {
-            "name_id": "Busuk Abu-abu (Botrytis Blight)",
-            "name_en": "Botrytis Blight",
-            "desc_id": "Bercak abu-abu/cokelat berair pada daun, daun lunak dan membusuk, muncul jamur putih/abu-abu/cokelat gelap, batang dan bunga ikut layu.",
-            "desc_en": "Water-soaked gray/brown spots on leaves, leaves become soft and rot, appearance of white/gray/dark brown mold, stems and flowers wilt.",
-            "ai_cat_id": "Bercak Cokelat",
-            "ai_cat_en": "Brown Spots",
-            "severity_text_id": "Sedang",
-            "severity_text_en": "Medium",
-            "severity_class": "warning"
-        },
-        {
-            "name_id": "Antraknosa (Anthracnose / Leaf Spot)",
-            "name_en": "Anthracnose / Leaf Spot",
-            "desc_id": "Bercak kecil yang membesar dan bertambah banyak, berkembang dari kuning menjadi cokelat hingga lesi cekung gelap, kadang disertai halo kuning.",
-            "desc_en": "Small spots that enlarge and multiply, develops from yellow to brown to dark sunken lesions, sometimes with a yellow halo.",
-            "ai_cat_id": "Bercak Cokelat",
-            "ai_cat_en": "Brown Spots",
-            "severity_text_id": "Sedang",
-            "severity_text_en": "Medium",
-            "severity_class": "warning"
-        },
-        {
-            "name_id": "Hawar Bakteri (Bacterial Blight)",
-            "name_en": "Bacterial Blight",
-            "desc_id": "Bercak kecil berair (water-soaked spots) yang membesar menjadi area cokelat nekrotik, muncul cairan lengket (ooze) pada kondisi lembap.",
-            "desc_en": "Small water-soaked spots enlarging into brown necrotic areas, sticky ooze appears in humid conditions.",
-            "ai_cat_id": "Bercak Cokelat",
-            "ai_cat_en": "Brown Spots",
-            "severity_text_id": "Tinggi",
-            "severity_text_en": "High",
-            "severity_class": "danger"
-        },
-        {
             "name_id": "Embun Tepung (Powdery Mildew)",
             "name_en": "Powdery Mildew",
+            "type": "disease",
             "desc_id": "Bercak putih seperti tepung meluas menutupi daun dan batang, daun menggulung, pertumbuhan melambat.",
             "desc_en": "White powdery spots spreading to cover leaves and stems, curling leaves, stunted growth.",
             "ai_cat_id": "Bercak Putih",
@@ -47,6 +15,7 @@ const TABLE_DATA = {
         {
             "name_id": "Embun Jelaga (Sooty Mold)",
             "name_en": "Sooty Mold",
+            "type": "disease",
             "desc_id": "Lapisan hitam seperti jelaga pada daun dan batang, mudah terhapus dengan kain lembap, residu lengket sebelum jelaga muncul.",
             "desc_en": "Soot-like black layer on leaves and stems, easily wiped off with a damp cloth, sticky residue before mold appears.",
             "ai_cat_id": "Bercak Bintik Hitam",
@@ -56,8 +25,33 @@ const TABLE_DATA = {
             "severity_class": "info"
         },
         {
+            "name_id": "Busuk Abu-abu (Botrytis Blight)",
+            "name_en": "Botrytis Blight",
+            "type": "disease",
+            "desc_id": "Bercak abu-abu/cokelat berair pada daun, daun lunak dan membusuk, muncul jamur putih/abu-abu/cokelat gelap, batang dan bunga ikut layu.",
+            "desc_en": "Water-soaked gray/brown spots on leaves, leaves become soft and rot, appearance of white/gray/dark brown mold, stems and flowers wilt.",
+            "ai_cat_id": "Bercak Cokelat",
+            "ai_cat_en": "Brown Spots",
+            "severity_text_id": "Sedang",
+            "severity_text_en": "Medium",
+            "severity_class": "warning"
+        },
+        {
+            "name_id": "Antraknosa (Anthracnose / Leaf Spot)",
+            "name_en": "Anthracnose / Leaf Spot",
+            "type": "disease",
+            "desc_id": "Bercak kecil yang membesar dan bertambah banyak, berkembang dari kuning menjadi cokelat hingga lesi cekung gelap, kadang disertai halo kuning.",
+            "desc_en": "Small spots that enlarge and multiply, develops from yellow to brown to dark sunken lesions, sometimes with a yellow halo.",
+            "ai_cat_id": "Bercak Cokelat",
+            "ai_cat_en": "Brown Spots",
+            "severity_text_id": "Sedang",
+            "severity_text_en": "Medium",
+            "severity_class": "warning"
+        },
+        {
             "name_id": "Bercak Daun Jamur/Bakteri (Unspecified Leaf Spot)",
             "name_en": "Unspecified Fungal/Bacterial Leaf Spot",
+            "type": "disease",
             "desc_id": "Bercak cokelat/hitam bulat, kadang disertai halo kuning.",
             "desc_en": "Round brown/black spots, sometimes accompanied by a yellow halo.",
             "ai_cat_id": "Bercak Bintik Hitam",
@@ -67,19 +61,9 @@ const TABLE_DATA = {
             "severity_class": "warning"
         },
         {
-            "name_id": "Busuk Akar (Root Rot)",
-            "name_en": "Root Rot",
-            "desc_id": "Daun menguning dan layu terasa lunak, batang lembek dekat media tanam, akar berubah abu-abu/cokelat/hitam dan lembek, bau apek/busuk.",
-            "desc_en": "Yellowing and wilting soft leaves, soft stems near potting mix, roots turn gray/brown/black and soft, musty/foul odor.",
-            "ai_cat_id": "Daun Layu",
-            "ai_cat_en": "Wilted Leaves",
-            "severity_text_id": "Tinggi",
-            "severity_text_en": "High",
-            "severity_class": "danger"
-        },
-        {
             "name_id": "Bercak Mata Katak (Cercospora)",
             "name_en": "Cercospora (Frog-eye Spot)",
+            "type": "disease",
             "desc_id": "Terdapat lesi atau bintik kecil berwarna abu-abu pada bagian tengah, tepi bintik berwarna cokelat kemerahan atau ungu.",
             "desc_en": "Gray lesions or small spots in the center, reddish-brown or purple edges around spots.",
             "ai_cat_id": "Bercak Cokelat",
@@ -91,6 +75,7 @@ const TABLE_DATA = {
         {
             "name_id": "Karat Daun (Rust)",
             "name_en": "Rust",
+            "type": "disease",
             "desc_id": "Terdapat pustul atau bintik menonjol di daun, berwarna oranye, merah karat, atau cokelat.",
             "desc_en": "Pustules or raised spots on leaves, orange, rust-red, or brown color.",
             "ai_cat_id": "Bercak Cokelat",
@@ -100,8 +85,9 @@ const TABLE_DATA = {
             "severity_class": "warning"
         },
         {
-            "name_id": "Kutu Putih (Mealybugs) - Hama",
-            "name_en": "Mealybugs (Pest)",
+            "name_id": "Kutu Putih (Mealybugs)",
+            "name_en": "Mealybugs",
+            "type": "pest",
             "desc_id": "Bercak putih seperti kapas di sela daun atau batang, daun terlihat kusam dan layu, terasa lengket (honeydew) mengundang semut.",
             "desc_en": "White cotton-like spots in leaf axils or stems, leaves look dull and wilted, sticky feeling (honeydew) attracts ants.",
             "ai_cat_id": "Bercak Putih",
@@ -111,8 +97,9 @@ const TABLE_DATA = {
             "severity_class": "warning"
         },
         {
-            "name_id": "Kutu Daun (Aphids) - Hama",
-            "name_en": "Aphids (Pest)",
+            "name_id": "Kutu Daun (Aphids)",
+            "name_en": "Aphids",
+            "type": "pest",
             "desc_id": "Serangga kecil bergerombol di pucuk daun muda, daun mengeriting dan berubah bentuk, muncul jamur jelaga hitam akibat honeydew, pertumbuhan terhambat.",
             "desc_en": "Small insects clustering on new shoots, curling and deformed leaves, black sooty mold appears due to honeydew, stunted growth.",
             "ai_cat_id": "Bercak Bintik Hitam",
@@ -122,8 +109,9 @@ const TABLE_DATA = {
             "severity_class": "warning"
         },
         {
-            "name_id": "Tungau Laba-laba (Spider Mites) - Hama",
-            "name_en": "Spider Mites (Pest)",
+            "name_id": "Tungau Laba-laba (Spider Mites)",
+            "name_en": "Spider Mites",
+            "type": "pest",
             "desc_id": "Daun memiliki bintik-bintik kuning kecil dan kusam, terlihat jaring halus di sekitar pangkal daun, daun menguning dan rontok prematur.",
             "desc_en": "Leaves have small dull yellow spots, fine webbing visible near leaf bases, premature yellowing and leaf drop.",
             "ai_cat_id": "N/A (Tidak terhubung ke ML)",
@@ -131,6 +119,78 @@ const TABLE_DATA = {
             "severity_text_id": "Sedang",
             "severity_text_en": "Medium",
             "severity_class": "warning"
+        },
+        {
+            "name_id": "Bercak Cokelat (Brown Spots)",
+            "name_en": "Brown Spots",
+            "type": "category",
+            "desc_id": "Kategori umum: Terdapat bercak-bercak berwarna cokelat pada permukaan daun. Biasanya disebabkan oleh infeksi jamur atau kondisi kelembapan yang terlalu tinggi.",
+            "desc_en": "General category: Brown spots on the leaf surface. Usually caused by fungal infection or excessive humidity.",
+            "ai_cat_id": "Bercak Cokelat",
+            "ai_cat_en": "Brown Spots",
+            "severity_text_id": "Sedang",
+            "severity_text_en": "Medium",
+            "severity_class": "warning"
+        },
+        {
+            "name_id": "Bercak Putih (White Spots)",
+            "name_en": "White Spots",
+            "type": "category",
+            "desc_id": "Kategori umum: Bercak putih menyerupai tepung atau jamur pada daun. Sering kali disebabkan oleh embun tepung (powdery mildew) atau hama tertentu.",
+            "desc_en": "General category: White spots resembling powder or mold on the leaves. Often caused by powdery mildew or certain pests.",
+            "ai_cat_id": "Bercak Putih",
+            "ai_cat_en": "White Spots",
+            "severity_text_id": "Sedang",
+            "severity_text_en": "Medium",
+            "severity_class": "warning"
+        },
+        {
+            "name_id": "Bercak Bintik Hitam (Black Spot)",
+            "name_en": "Black Spot",
+            "type": "category",
+            "desc_id": "Kategori umum: Bintik-bintik hitam kecil yang menyebar di permukaan daun. Dapat menyebabkan daun menguning dan gugur secara prematur.",
+            "desc_en": "General category: Small black spots spreading on the leaf surface. Can cause leaves to yellow and drop prematurely.",
+            "ai_cat_id": "Bercak Bintik Hitam",
+            "ai_cat_en": "Black Spot",
+            "severity_text_id": "Sedang",
+            "severity_text_en": "Medium",
+            "severity_class": "warning"
+        },
+        {
+            "name_id": "Hawar Bakteri (Bacterial Blight)",
+            "name_en": "Bacterial Blight",
+            "type": "disease",
+            "desc_id": "Bercak kecil berair (water-soaked spots) yang membesar menjadi area cokelat nekrotik, muncul cairan lengket (ooze) pada kondisi lembap.",
+            "desc_en": "Small water-soaked spots enlarging into brown necrotic areas, sticky ooze appears in humid conditions.",
+            "ai_cat_id": "Bercak Cokelat",
+            "ai_cat_en": "Brown Spots",
+            "severity_text_id": "Tinggi",
+            "severity_text_en": "High",
+            "severity_class": "danger"
+        },
+        {
+            "name_id": "Busuk Akar (Root Rot)",
+            "name_en": "Root Rot",
+            "type": "disease",
+            "desc_id": "Daun menguning dan layu terasa lunak, batang lembek dekat media tanam, akar berubah abu-abu/cokelat/hitam dan lembek, bau apek/busuk.",
+            "desc_en": "Yellowing and wilting soft leaves, soft stems near potting mix, roots turn gray/brown/black and soft, musty/foul odor.",
+            "ai_cat_id": "Daun Layu",
+            "ai_cat_en": "Wilted Leaves",
+            "severity_text_id": "Tinggi",
+            "severity_text_en": "High",
+            "severity_class": "danger"
+        },
+        {
+            "name_id": "Daun Layu (Wilting Leaves)",
+            "name_en": "Wilting Leaves",
+            "type": "category",
+            "desc_id": "Kategori umum: Daun terlihat kehilangan turgor (kekakuan), keriput, atau menguning. Bisa mengindikasikan masalah akar atau air.",
+            "desc_en": "General category: Leaves look to have lost turgor (stiffness), wrinkled, or yellowing. Can indicate root or water problems.",
+            "ai_cat_id": "Daun Layu",
+            "ai_cat_en": "Wilted Leaves",
+            "severity_text_id": "Tinggi",
+            "severity_text_en": "High",
+            "severity_class": "danger"
         }
     ],
     "species": [
