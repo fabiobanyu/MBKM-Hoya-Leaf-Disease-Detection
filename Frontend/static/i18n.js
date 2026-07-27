@@ -161,11 +161,11 @@ function renderDynamicTables(lang) {
         diseaseTableBody.innerHTML = TABLE_DATA.diseases.map(d => {
             let typeBadge = '';
             if (d.type === 'pest') {
-                typeBadge = `<br><span class="badge" style="background: rgba(234,179,8,0.2); color: #fde047; margin-top: 6px; display: inline-block; font-size: 0.75rem;"><i class="fa-solid fa-bug"></i> ${lang === 'en' ? 'Pest' : 'Hama'}</span>`;
+                typeBadge = `<br><span class="badge-type badge-type-pest"><i class="fa-solid fa-bug"></i> ${lang === 'en' ? 'Pest' : 'Hama'}</span>`;
             } else if (d.type === 'category') {
-                typeBadge = `<br><span class="badge" style="background: rgba(148,163,184,0.2); color: #cbd5e1; margin-top: 6px; display: inline-block; font-size: 0.75rem;"><i class="fa-solid fa-layer-group"></i> ${lang === 'en' ? 'General Category' : 'Kategori Umum'}</span>`;
+                typeBadge = `<br><span class="badge-type badge-type-category"><i class="fa-solid fa-layer-group"></i> ${lang === 'en' ? 'General Category' : 'Kategori Umum'}</span>`;
             } else {
-                typeBadge = `<br><span class="badge" style="background: rgba(168,85,247,0.2); color: #c084fc; margin-top: 6px; display: inline-block; font-size: 0.75rem;"><i class="fa-solid fa-virus"></i> ${lang === 'en' ? 'Disease' : 'Penyakit'}</span>`;
+                typeBadge = `<br><span class="badge-type badge-type-disease"><i class="fa-solid fa-virus"></i> ${lang === 'en' ? 'Disease' : 'Penyakit'}</span>`;
             }
             
             return `

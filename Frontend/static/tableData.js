@@ -114,8 +114,8 @@ const TABLE_DATA = {
             "type": "pest",
             "desc_id": "Daun memiliki bintik-bintik kuning kecil dan kusam, terlihat jaring halus di sekitar pangkal daun, daun menguning dan rontok prematur.",
             "desc_en": "Leaves have small dull yellow spots, fine webbing visible near leaf bases, premature yellowing and leaf drop.",
-            "ai_cat_id": "N/A (Tidak terhubung ke ML)",
-            "ai_cat_en": "N/A (Not linked to ML)",
+            "ai_cat_id": "Pemeriksaan Visual",
+            "ai_cat_en": "Visual Inspection",
             "severity_text_id": "Sedang",
             "severity_text_en": "Medium",
             "severity_class": "warning"
