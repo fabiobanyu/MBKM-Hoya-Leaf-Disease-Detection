@@ -185,10 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentKnowledge.forEach(disease => {
             // Find the correct translated title (fallback to EN if ID doesn't exist)
             const title = currentAppLang === 'en' ? disease.disease_en : (disease.disease_id || disease.disease_en);
+            const typeIcon = disease.type === 'Pest' ? 'fa-bug' : 'fa-virus';
             
             let html = `
             <div class="knowledge-item">
-                <h3><i class="fa-solid fa-virus"></i> ${title}</h3>
+                <h3><i class="fa-solid ${typeIcon}"></i> ${title}</h3>
                 <div class="kg-grid">
             `;
             

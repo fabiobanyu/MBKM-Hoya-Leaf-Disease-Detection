@@ -248,11 +248,12 @@ def predict():
             try:
                 with neo4j_driver.session() as session:
                     query = """
-                    MATCH (d:Disease {category: $category})
-                    OPTIONAL MATCH (d)-[:HAS_SYMPTOM]->(s:Symptom)
-                    OPTIONAL MATCH (d)-[:FAVORED_BY]->(c:CausalFactor)
-                    OPTIONAL MATCH (d)-[:TREATED_WITH]->(t:Treatment)
-                    RETURN d.name_id AS d_id, d.name_en AS d_en,
+                    MATCH (n)
+                    WHERE (n:Disease OR n:Pest) AND n.category = $category
+                    OPTIONAL MATCH (n)-[:HAS_SYMPTOM]->(s:Symptom)
+                    OPTIONAL MATCH (n)-[:FAVORED_BY]->(c:CausalFactor)
+                    OPTIONAL MATCH (n)-[:TREATED_WITH]->(t:Treatment)
+                    RETURN labels(n)[0] AS type, n.name_id AS d_id, n.name_en AS d_en,
                            collect(DISTINCT {id: s.name_id, en: s.name_en}) AS symptoms,
                            collect(DISTINCT {id: c.name_id, en: c.name_en}) AS causes,
                            collect(DISTINCT {id: t.name_id, en: t.name_en}) AS treatments
@@ -265,6 +266,7 @@ def predict():
                         treatments = [t for t in record["treatments"] if t.get("id")]
                         
                         knowledge_data.append({
+                            "type": record["type"],
                             "disease_id": record["d_id"],
                             "disease_en": record["d_en"],
                             "symptoms": symptoms,

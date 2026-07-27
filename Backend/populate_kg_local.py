@@ -9,6 +9,11 @@ Menggunakan MERGE sehingga aman dijalankan berulang kali.
 """
 
 from neo4j import GraphDatabase
+import sys
+
+# Ensure UTF-8 output to prevent UnicodeEncodeError in Windows CMD/PowerShell
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Konfigurasi Neo4j Lokal ──────────────────────────────────
 URI = "neo4j://127.0.0.1:7687"
@@ -36,7 +41,7 @@ species_categories = {
     "hoya carnosa": ["Tanaman Hias", "Tanaman Obat"],
 }
 
-# ── Data 7 Penyakit ──────────────────────────────────────────
+# ── Data 9 Penyakit ──────────────────────────────────────────
 diseases = [
     {"en": "Botrytis Blight", "id": "Busuk Abu-abu", "category": "Bercak Cokelat"},
     {"en": "Anthracnose / Leaf Spot Disease", "id": "Antraknosa / Penyakit Bercak Daun", "category": "Bercak Cokelat"},
@@ -46,10 +51,14 @@ diseases = [
     {"en": "Unspecified Fungal/Bacterial Leaf Spot", "id": "Bercak Daun Jamur/Bakteri Tidak Spesifik", "category": "Bercak Bintik Hitam"},
     {"en": "Root Rot", "id": "Busuk Akar", "category": "Daun Layu"},
     {"en": "Cercospora", "id": "Bercak Mata Katak", "category": "Bercak Cokelat"},
-    {"en": "Rust", "id": "Karat Daun", "category": "Bercak Cokelat"},
+    {"en": "Rust", "id": "Karat Daun", "category": "Bercak Cokelat"}
+]
+
+# ── Data 3 Hama ──────────────────────────────────────────────
+pests = [
     {"en": "Mealybugs", "id": "Kutu Putih", "category": "Bercak Putih"},
-    {"en": "Aphids", "id": "Kutu Daun", "category": "Daun Layu"},
-    {"en": "Spider Mites", "id": "Tungau Laba-laba", "category": "Bercak Bintik Hitam"}
+    {"en": "Aphids", "id": "Kutu Daun", "category": "Bercak Bintik Hitam"},
+    {"en": "Spider Mites", "id": "Tungau Laba-laba", "category": None}
 ]
 
 # ── Struktur Pengetahuan Relasional Bilingual ────────────────
@@ -228,6 +237,7 @@ knowledge = {
         "symptoms": [
             {"id": "Serangga kecil bergerombol di pucuk daun muda", "en": "Small insects clustering on new shoots"},
             {"id": "Daun mengeriting dan berubah bentuk", "en": "Curling and deformed leaves"},
+            {"id": "Muncul jamur jelaga hitam akibat honeydew", "en": "Black sooty mold appears due to honeydew"},
             {"id": "Pertumbuhan tanaman terhambat", "en": "Stunted plant growth"}
         ],
         "causes": [
@@ -283,6 +293,7 @@ def main():
         constraints = [
             "CREATE CONSTRAINT IF NOT EXISTS FOR (s:HoyaSpecies) REQUIRE s.name_en IS UNIQUE",
             "CREATE CONSTRAINT IF NOT EXISTS FOR (d:Disease) REQUIRE d.name_en IS UNIQUE",
+            "CREATE CONSTRAINT IF NOT EXISTS FOR (pst:Pest) REQUIRE pst.name_en IS UNIQUE",
             "CREATE CONSTRAINT IF NOT EXISTS FOR (sym:Symptom) REQUIRE sym.name_en IS UNIQUE",
             "CREATE CONSTRAINT IF NOT EXISTS FOR (c:CausalFactor) REQUIRE c.name_en IS UNIQUE",
             "CREATE CONSTRAINT IF NOT EXISTS FOR (t:Treatment) REQUIRE t.name_en IS UNIQUE",
@@ -318,8 +329,8 @@ def main():
                 cat_count += 1
         print(f"   ✅ {cat_count} relasi kategori diproses (MERGE).\n")
 
-        # ── 4. MERGE Penyakit (7 jenis) ───────────────────────
-        print("🦠 Menambahkan 7 Penyakit...")
+        # ── 4. MERGE Penyakit (9 jenis) ───────────────────────
+        print("🦠 Menambahkan 9 Penyakit...")
         for d in diseases:
             session.run(
                 "MERGE (dis:Disease {name_en: $en}) "
@@ -328,48 +339,62 @@ def main():
             )
         print(f"   ✅ {len(diseases)} penyakit diproses (MERGE).\n")
 
+        # ── 4.5. MERGE Hama (3 jenis) ───────────────────────
+        print("🐛 Menambahkan 3 Hama...")
+        for p in pests:
+            session.run(
+                "MERGE (pst:Pest {name_en: $en}) "
+                "SET pst.name_id = $id, pst.category = $cat",
+                en=p["en"], id=p["id"], cat=p["category"]
+            )
+        print(f"   ✅ {len(pests)} hama diproses (MERGE).\n")
+
         # ── 5. MERGE Gejala, Penyebab, Penanganan + Relasi ───
         print("🔗 Menambahkan Gejala, Penyebab, Penanganan beserta Relasi...")
         sym_count, cause_count, treat_count = 0, 0, 0
 
-        for disease_en, data in knowledge.items():
+        for entity_en, data in knowledge.items():
+
+            label = "Disease" if any(d["en"] == entity_en for d in diseases) else "Pest" if any(p["en"] == entity_en for p in pests) else None
+            if not label:
+                continue
 
             # Gejala (HAS_SYMPTOM)
             for sym in data["symptoms"]:
                 session.run(
-                    """
-                    MATCH (d:Disease {name_en: $d_name})
-                    MERGE (s:Symptom {name_en: $s_en})
+                    f"""
+                    MATCH (n:{label} {{name_en: $name}})
+                    MERGE (s:Symptom {{name_en: $s_en}})
                     SET s.name_id = $s_id
-                    MERGE (d)-[:HAS_SYMPTOM]->(s)
+                    MERGE (n)-[:HAS_SYMPTOM]->(s)
                     """,
-                    d_name=disease_en, s_en=sym["en"], s_id=sym["id"]
+                    name=entity_en, s_en=sym["en"], s_id=sym["id"]
                 )
                 sym_count += 1
 
             # Penyebab (FAVORED_BY)
             for cause in data["causes"]:
                 session.run(
-                    """
-                    MATCH (d:Disease {name_en: $d_name})
-                    MERGE (c:CausalFactor {name_en: $c_en})
+                    f"""
+                    MATCH (n:{label} {{name_en: $name}})
+                    MERGE (c:CausalFactor {{name_en: $c_en}})
                     SET c.name_id = $c_id
-                    MERGE (d)-[:FAVORED_BY]->(c)
+                    MERGE (n)-[:FAVORED_BY]->(c)
                     """,
-                    d_name=disease_en, c_en=cause["en"], c_id=cause["id"]
+                    name=entity_en, c_en=cause["en"], c_id=cause["id"]
                 )
                 cause_count += 1
 
             # Penanganan (TREATED_WITH)
             for treatment in data["treatments"]:
                 session.run(
-                    """
-                    MATCH (d:Disease {name_en: $d_name})
-                    MERGE (t:Treatment {name_en: $t_en})
+                    f"""
+                    MATCH (n:{label} {{name_en: $name}})
+                    MERGE (t:Treatment {{name_en: $t_en}})
                     SET t.name_id = $t_id
-                    MERGE (d)-[:TREATED_WITH]->(t)
+                    MERGE (n)-[:TREATED_WITH]->(t)
                     """,
-                    d_name=disease_en, t_en=treatment["en"], t_id=treatment["id"]
+                    name=entity_en, t_en=treatment["en"], t_id=treatment["id"]
                 )
                 treat_count += 1
 
