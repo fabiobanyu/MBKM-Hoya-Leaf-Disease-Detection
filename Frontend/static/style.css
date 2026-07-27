@@ -1830,3 +1830,74 @@ body {
     color: #c084fc;
     border: 1px solid rgba(168, 85, 247, 0.35);
 }
+
+/* Navbar Language Switch Glow Effect */
+.nav-lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 8px;
+}
+.nav-lang-switch .lang-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
+.nav-lang-switch .lang-text.active-id {
+    color: #60a5fa; /* Light Blue for ID */
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+}
+.nav-lang-switch .lang-text.active-en {
+    color: #4ade80; /* Light Green for EN */
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.8);
+}
+
+.switch-glow {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+}
+.switch-glow input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider-glow {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(96, 165, 250, 0.15);
+    transition: .4s;
+    border-radius: 26px;
+    border: 1px solid rgba(96, 165, 250, 0.5);
+    box-shadow: inset 0 0 5px rgba(96, 165, 250, 0.3), 0 0 12px rgba(96, 165, 250, 0.4);
+}
+.slider-glow:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: #60a5fa;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #60a5fa;
+}
+
+/* Checked (EN state) */
+.switch-glow input:checked + .slider-glow {
+    background-color: rgba(74, 222, 128, 0.15);
+    border-color: rgba(74, 222, 128, 0.5);
+    box-shadow: inset 0 0 5px rgba(74, 222, 128, 0.3), 0 0 12px rgba(74, 222, 128, 0.4);
+}
+.switch-glow input:checked + .slider-glow:before {
+    transform: translateX(20px);
+    background-color: #4ade80;
+    box-shadow: 0 0 10px #4ade80;
+}

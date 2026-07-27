@@ -99,10 +99,29 @@ function applyTranslations(lang) {
     currentAppLang = lang;
     localStorage.setItem('appLang', lang);
     
-    // Update toggle button text
-    const langBtnText = document.getElementById('currentLangText');
-    if (langBtnText) {
-        langBtnText.textContent = lang.toUpperCase();
+    // Update toggle button UI
+    const langToggleBtn = document.getElementById('langToggleBtn');
+    const langID = document.getElementById('langID');
+    const langEN = document.getElementById('langEN');
+    
+    if (langToggleBtn) {
+        // If it's the new checkbox switch
+        if (langToggleBtn.type === 'checkbox') {
+            langToggleBtn.checked = (lang === 'en');
+            if (langID && langEN) {
+                if (lang === 'en') {
+                    langID.classList.remove('active-id');
+                    langEN.classList.add('active-en');
+                } else {
+                    langID.classList.add('active-id');
+                    langEN.classList.remove('active-en');
+                }
+            }
+        } else {
+            // Fallback for old button
+            const langBtnText = document.getElementById('currentLangText');
+            if (langBtnText) langBtnText.textContent = lang.toUpperCase();
+        }
     }
     
     // Translate all static elements with data-i18n
@@ -199,9 +218,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach listener to the main toggle button
     const toggleBtn = document.getElementById('langToggleBtn');
     if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            const newLang = currentAppLang === 'id' ? 'en' : 'id';
-            applyTranslations(newLang);
-        });
+        if (toggleBtn.type === 'checkbox') {
+            toggleBtn.addEventListener('change', () => {
+                const newLang = toggleBtn.checked ? 'en' : 'id';
+                applyTranslations(newLang);
+            });
+        } else {
+            toggleBtn.addEventListener('click', () => {
+                const newLang = currentAppLang === 'id' ? 'en' : 'id';
+                applyTranslations(newLang);
+            });
+        }
     }
 });
