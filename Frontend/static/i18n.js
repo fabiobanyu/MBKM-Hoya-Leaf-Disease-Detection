@@ -23,7 +23,7 @@ const translations = {
         th_species_name: 'Nama Spesies',
         th_species_cat: 'Kategori Pemanfaatan',
         th_species_desc: 'Deskripsi Singkat',
-        // Dynamic elements
+
         error_title_noise: 'Sistem Keamanan AI',
         error_msg_noise_small: 'Gambar Terdeteksi Bukan Daun Hoya. Ukuran gambar terlalu kecil, harap gunakan foto yang lebih besar.',
         error_msg_noise_blur: 'Gambar Terdeteksi Bukan Daun Hoya. Foto terlalu buram atau tidak fokus, harap foto ulang daun dengan lebih jelas.',
@@ -38,7 +38,7 @@ const translations = {
         btn_flip_h: 'Balik Horizontal',
         btn_flip_v: 'Balik Vertikal',
         btn_reset: 'Reset',
-        // AI Categories
+
         cat_sehat: 'Sehat',
         cat_bercak_cokelat: 'Bercak Cokelat',
         cat_bercak_putih: 'Bercak Putih',
@@ -69,7 +69,7 @@ const translations = {
         th_species_name: 'Species Name',
         th_species_cat: 'Utilization Category',
         th_species_desc: 'Brief Description',
-        // Dynamic elements
+
         error_title_noise: 'AI Security System',
         error_msg_noise_small: 'Image Detected as Non-Hoya Leaf. The image size is too small, please use a larger photo.',
         error_msg_noise_blur: 'Image Detected as Non-Hoya Leaf. The photo is too blurry or out of focus, please retake a clearer photo of the leaf.',
@@ -84,7 +84,7 @@ const translations = {
         btn_flip_h: 'Flip Horizontal',
         btn_flip_v: 'Flip Vertical',
         btn_reset: 'Reset',
-        // AI Categories
+
         cat_sehat: 'Healthy',
         cat_bercak_cokelat: 'Brown Spots',
         cat_bercak_putih: 'White Spots',
@@ -98,14 +98,13 @@ let currentAppLang = localStorage.getItem('appLang') || 'id';
 function applyTranslations(lang) {
     currentAppLang = lang;
     localStorage.setItem('appLang', lang);
-    
-    // Update toggle button UI
+
     const langToggleBtn = document.getElementById('langToggleBtn');
     const langID = document.getElementById('langID');
     const langEN = document.getElementById('langEN');
-    
+
     if (langToggleBtn) {
-        // If it's the new checkbox switch
+
         if (langToggleBtn.type === 'checkbox') {
             langToggleBtn.checked = (lang === 'en');
             if (langID && langEN) {
@@ -118,18 +117,17 @@ function applyTranslations(lang) {
                 }
             }
         } else {
-            // Fallback for old button
+
             const langBtnText = document.getElementById('currentLangText');
             if (langBtnText) langBtnText.textContent = lang.toUpperCase();
         }
     }
-    
-    // Translate all static elements with data-i18n
+
     const elements = document.querySelectorAll('[data-i18n]');
     elements.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) {
-            // Check if element has an icon child to preserve it
+
             const icon = el.querySelector('i');
             if (icon) {
                 el.innerHTML = '';
@@ -141,7 +139,6 @@ function applyTranslations(lang) {
         }
     });
 
-    // Translate dynamic inputs/placeholders if any
     const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
     placeholders.forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
@@ -149,32 +146,29 @@ function applyTranslations(lang) {
             el.setAttribute('placeholder', translations[lang][key]);
         }
     });
-    
-    // Handle dynamic tables (Disease & Species) with animation
+
     if (typeof TABLE_DATA !== 'undefined') {
         const diseaseTableBody = document.getElementById('diseaseTableBody');
         const speciesTableBody = document.getElementById('speciesTableBody');
-        
-        // Add a simple fade transition
+
         const tables = [diseaseTableBody, speciesTableBody].filter(Boolean);
         tables.forEach(tbody => tbody.style.opacity = '0.3');
-        
+
         setTimeout(() => {
             renderDynamicTables(lang);
             tables.forEach(tbody => {
                 tbody.style.transition = 'opacity 0.3s ease-in-out';
                 tbody.style.opacity = '1';
             });
-        }, 150); // slight delay to make transition smooth
+        }, 150);
     }
-    
-    // Dispatch custom event so script.js can update dynamic parts
+
     document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang } }));
 }
 
 function renderDynamicTables(lang) {
     if (typeof TABLE_DATA === 'undefined') return;
-    
+
     const diseaseTableBody = document.getElementById('diseaseTableBody');
     if (diseaseTableBody) {
         diseaseTableBody.innerHTML = TABLE_DATA.diseases.map(d => {
@@ -186,7 +180,7 @@ function renderDynamicTables(lang) {
             } else {
                 typeBadge = `<br><span class="badge-type badge-type-disease"><i class="fa-solid fa-virus"></i> ${lang === 'en' ? 'Disease' : 'Penyakit'}</span>`;
             }
-            
+
             return `
             <tr>
                 <td><strong>${lang === 'en' ? d.name_en : d.name_id}</strong>${typeBadge}</td>
@@ -197,7 +191,7 @@ function renderDynamicTables(lang) {
         `;
         }).join('');
     }
-    
+
     const speciesTableBody = document.getElementById('speciesTableBody');
     if (speciesTableBody) {
         speciesTableBody.innerHTML = TABLE_DATA.species.map(s => `
@@ -211,11 +205,9 @@ function renderDynamicTables(lang) {
     }
 }
 
-// Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     applyTranslations(currentAppLang);
-    
-    // Attach listener to the main toggle button
+
     const toggleBtn = document.getElementById('langToggleBtn');
     if (toggleBtn) {
         if (toggleBtn.type === 'checkbox') {
