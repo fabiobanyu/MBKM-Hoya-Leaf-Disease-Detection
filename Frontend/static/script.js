@@ -20,13 +20,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const homePage = document.getElementById('homePage');
     const diseaseInfoPage = document.getElementById('diseaseInfoPage');
 
-    const modeUploadBtn = document.getElementById('modeUploadBtn');
-    const modeCameraBtn = document.getElementById('modeCameraBtn');
+    const fabCameraToggleBtn = document.getElementById('fabCameraToggleBtn');
+    let isCameraMode = false;
     const cameraZone = document.getElementById('cameraZone');
     const cameraStream = document.getElementById('cameraStream');
     const cameraCanvas = document.getElementById('cameraCanvas');
     const captureBtn = document.getElementById('captureBtn');
     const brightnessSlider = document.getElementById('brightnessSlider');
+
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
+    if (hamburgerBtn && navMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking a nav button (use getElementById to avoid referencing undeclared const)
+        ['navHomeBtn', 'navDiseaseBtn', 'navSpeciesBtn'].forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) btn.addEventListener('click', () => navMenu.classList.remove('active'));
+        });
+    }
 
     let cameraMediaStream = null;
 
@@ -312,19 +326,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    modeUploadBtn.addEventListener('click', () => {
-        modeUploadBtn.classList.add('active');
-        modeCameraBtn.classList.remove('active');
-        transitionTo(cameraZone, dropZone);
-        stopCamera();
-    });
-
-    modeCameraBtn.addEventListener('click', () => {
-        modeCameraBtn.classList.add('active');
-        modeUploadBtn.classList.remove('active');
-        transitionTo(dropZone, cameraZone);
-        startCamera();
-    });
+    if (fabCameraToggleBtn) {
+        fabCameraToggleBtn.addEventListener('click', () => {
+            if (isCameraMode) {
+                // Switch to Upload Mode
+                isCameraMode = false;
+                fabCameraToggleBtn.innerHTML = '<i class="fa-solid fa-camera"></i>';
+                transitionTo(cameraZone, dropZone);
+                stopCamera();
+            } else {
+                // Switch to Camera Mode
+                isCameraMode = true;
+                fabCameraToggleBtn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i>';
+                transitionTo(dropZone, cameraZone);
+                startCamera();
+            }
+        });
+    }
 
     async function startCamera() {
         try {
@@ -340,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error("Error accessing camera:", err);
             alert("Unable to access camera. Please make sure permissions are granted.");
-            modeUploadBtn.click();
+            if (isCameraMode) fabCameraToggleBtn.click();
         }
     }
 
@@ -435,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imagePreview.src = e.target.result;
 
             const toHide = dropZone.classList.contains('hidden') ? cameraZone : dropZone;
-            document.querySelector('.mode-toggle').classList.add('hidden');
+            if (fabCameraToggleBtn) fabCameraToggleBtn.classList.add('hidden');
             transitionTo(toHide, previewArea);
         };
         reader.readAsDataURL(file);
@@ -614,10 +632,9 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFile = null;
         fileInput.value = '';
 
-        const modeToggle = document.querySelector('.mode-toggle');
-        if (modeToggle) modeToggle.classList.remove('hidden');
+        if (fabCameraToggleBtn) fabCameraToggleBtn.classList.remove('hidden');
 
-        const toShow = modeCameraBtn.classList.contains('active') ? cameraZone : dropZone;
+        const toShow = isCameraMode ? cameraZone : dropZone;
         transitionTo(previewArea, toShow);
 
         const cropperToDestroy = cropper;
@@ -629,7 +646,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (imagePreview) imagePreview.src = '';
         }, 280);
 
-        if (modeCameraBtn.classList.contains('active')) {
+        if (isCameraMode) {
             startCamera();
         }
     });
@@ -764,9 +781,9 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFile = null;
         fileInput.value = '';
 
-        document.querySelector('.mode-toggle').classList.remove('hidden');
+        if (fabCameraToggleBtn) fabCameraToggleBtn.classList.remove('hidden');
 
-        const toShow = modeCameraBtn.classList.contains('active') ? cameraZone : dropZone;
+        const toShow = isCameraMode ? cameraZone : dropZone;
         const mainInfoSection = document.getElementById('mainInfoSection');
 
         if (instant) {
@@ -785,7 +802,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderHistory();
 
-        if (modeCameraBtn.classList.contains('active')) {
+        if (isCameraMode) {
             startCamera();
         }
     }
@@ -794,8 +811,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (retryCropBtn) {
         retryCropBtn.addEventListener('click', () => {
-
-            document.querySelector('.mode-toggle').classList.add('hidden');
+            if (fabCameraToggleBtn) fabCameraToggleBtn.classList.add('hidden');
             transitionTo(resultsSection, [uploadPanel, previewArea]);
         });
     }
@@ -824,8 +840,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (activePage === homePage) {
             resetToHome(true);
+            if (fabCameraToggleBtn) fabCameraToggleBtn.classList.remove('hidden');
         } else {
-
+            if (fabCameraToggleBtn) fabCameraToggleBtn.classList.add('hidden');
             transitionTo([uploadPanel, previewArea, loadingSection, resultsSection, knowledgeSection, historySection], []);
         }
 

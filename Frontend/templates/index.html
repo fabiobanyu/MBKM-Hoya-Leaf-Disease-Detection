@@ -28,13 +28,14 @@
                 </a>
             </div>
 
-            <div class="nav-menu">
+            <div class="nav-menu" id="navMenu">
                 <button class="nav-btn active" id="navHomeBtn" data-i18n="nav_home"><i class="fa-solid fa-house"></i> Beranda</button>
                 <button class="nav-btn" id="navDiseaseBtn" data-i18n="nav_disease"><i class="fa-solid fa-notes-medical"></i> Gejala Penyakit</button>
                 <button class="nav-btn" id="navSpeciesBtn" data-i18n="nav_species"><i class="fa-solid fa-seedling"></i> 10 Spesies</button>
 
-                <div class="nav-divider" style="display: block; height: 28px; margin: auto 8px;"></div>
-                <div class="nav-lang-switch">
+                <!-- Lang toggle inside menu for PC -->
+                <div class="nav-divider desktop-only"></div>
+                <div class="nav-lang-switch desktop-only" id="langSwitchDesktop">
                     <span class="lang-text" id="langID">ID</span>
                     <label class="switch-glow">
                         <input type="checkbox" id="langToggleBtn">
@@ -43,6 +44,22 @@
                     <span class="lang-text" id="langEN">EN</span>
                 </div>
             </div>
+
+            <!-- Mobile-only: lang toggle + hamburger, visible outside menu -->
+            <div class="nav-mobile-controls">
+                <div class="nav-lang-switch" id="langSwitchMobile">
+                    <span class="lang-text mobile-lang-id">ID</span>
+                    <label class="switch-glow">
+                        <input type="checkbox" id="langToggleBtnMobile">
+                        <span class="slider-glow"></span>
+                    </label>
+                    <span class="lang-text mobile-lang-en">EN</span>
+                </div>
+                <button class="hamburger-btn" id="hamburgerBtn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
         </div>
     </nav>
 
@@ -64,10 +81,7 @@
 
                 <section class="upload-section glass-panel" id="uploadPanel">
 
-                    <div class="mode-toggle">
-                        <button class="mode-btn active" id="modeUploadBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
-                        <button class="mode-btn" id="modeCameraBtn"><i class="fa-solid fa-camera"></i> Camera</button>
-                    </div>
+                    <!-- Mode toggle removed, using FAB instead -->
 
                     <div class="upload-area" id="dropZone">
                         <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
@@ -136,8 +150,8 @@
                             <i class="fa-solid fa-seedling text-gradient"></i>
                         </div>
                         <div class="about-text">
-                            <h3 data-i18n="about_title">Tentang Hoya AI Vision</h3>
-                            <p data-i18n="about_p1"><strong>Hoya AI Vision</strong> merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara <strong>BRIN</strong> (Badan Riset dan Inovasi Nasional) dan <strong>ITERA</strong> (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.</p>
+                            <h3 data-i18n="about_title">Tentang Hoya Vision</h3>
+                            <p data-i18n="about_p1"><strong>Hoya Vision</strong> merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara <strong>BRIN</strong> (Badan Riset dan Inovasi Nasional) dan <strong>ITERA</strong> (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.</p>
                             <p data-i18n="about_p2">Sistem ini diintegrasikan dengan <strong>Knowledge Graph (KG)</strong> yang mampu menyajikan informasi terstruktur dan komprehensif mengenai penanganan penyakit, penyebab, dan langkah preventif, membantu para peneliti maupun pembudidaya tanaman hias menjaga kesehatan tanaman Hoya dengan lebih presisi dan efisien.</p>
                         </div>
                     </div>
@@ -275,10 +289,14 @@
         <footer>
             <p>Hoya Vision Web Evaluation &bull; Powered by Deep Learning</p>
         </footer>
+        
+        <button class="fab-btn" id="fabCameraToggleBtn" title="Gunakan Kamera/Upload">
+            <i class="fa-solid fa-camera"></i>
+        </button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="{{ url_for('static', filename='tableData.js') }}"></script>
     <script src="{{ url_for('static', filename='i18n.js') }}"></script>
-    <script src="{{ url_for('static', filename='script.js') }}?v=4"></script>
+    <script src="{{ url_for('static', filename='script.js') }}?v=5"></script>
 </body>
 </html>

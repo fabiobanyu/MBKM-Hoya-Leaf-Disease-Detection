@@ -8,8 +8,8 @@ const translations = {
         upload_btn: 'Pilih File',
         camera_hint: 'Posisikan daun di dalam bingkai dan ambil foto',
         crop_hint: 'Atur pemotong (crop) agar fokus pada area daun utama.',
-        about_title: 'Tentang Hoya AI Vision',
-        about_p1: 'Hoya AI Vision merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara BRIN (Badan Riset dan Inovasi Nasional) dan ITERA (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.',
+        about_title: 'Tentang Hoya Vision',
+        about_p1: 'Hoya Vision merupakan sistem berbasis kecerdasan buatan (AI) hasil riset kolaboratif antara BRIN (Badan Riset dan Inovasi Nasional) dan ITERA (Institut Teknologi Sumatera). Platform ini dirancang secara khusus untuk mendeteksi berbagai jenis penyakit yang menyerang daun tanaman Hoya, serta mengidentifikasi hingga 10 spesies Hoya yang berbeda secara otomatis hanya melalui sebuah foto.',
         about_p2: 'Sistem ini diintegrasikan dengan Knowledge Graph (KG) yang mampu menyajikan informasi terstruktur dan komprehensif mengenai penanganan penyakit, penyebab, dan langkah preventif, membantu para peneliti maupun pembudidaya tanaman hias menjaga kesehatan tanaman Hoya dengan lebih presisi dan efisien.',
         disease_title: 'Informasi Gejala Penyakit Hoya',
         disease_desc: 'Kenali berbagai jenis penyakit yang menyerang tanaman Hoya beserta ciri-ciri visualnya. Penyakit-penyakit di bawah ini memiliki panduan penanganan lengkap dari Knowledge Graph yang akan muncul otomatis saat Anda scan daun.',
@@ -54,8 +54,8 @@ const translations = {
         upload_btn: 'Browse Files',
         camera_hint: 'Position the leaf in the frame and capture',
         crop_hint: 'Adjust the crop box to focus on the main leaf area.',
-        about_title: 'About Hoya AI Vision',
-        about_p1: 'Hoya AI Vision is an Artificial Intelligence (AI) system resulting from collaborative research between BRIN (National Research and Innovation Agency) and ITERA (Sumatera Institute of Technology). This platform is specifically designed to detect various diseases attacking Hoya plant leaves and automatically identify up to 10 different Hoya species from just a single photo.',
+        about_title: 'About Hoya Vision',
+        about_p1: 'Hoya Vision is an Artificial Intelligence (AI) system resulting from collaborative research between BRIN (National Research and Innovation Agency) and ITERA (Sumatera Institute of Technology). This platform is specifically designed to detect various diseases attacking Hoya plant leaves and automatically identify up to 10 different Hoya species from just a single photo.',
         about_p2: 'The system is integrated with a Knowledge Graph (KG) that provides structured and comprehensive information regarding disease treatments, causes, and preventive measures, helping researchers and ornamental plant cultivators maintain Hoya plant health with greater precision and efficiency.',
         disease_title: 'Hoya Disease Symptoms Information',
         disease_desc: 'Recognize the various types of diseases that attack Hoya plants along with their visual characteristics. The diseases below have complete treatment guidelines from the Knowledge Graph that will appear automatically when you scan a leaf.',
@@ -209,10 +209,18 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTranslations(currentAppLang);
 
     const toggleBtn = document.getElementById('langToggleBtn');
+    const toggleBtnMobile = document.getElementById('langToggleBtnMobile');
+
+    // Sync mobile toggle initial state
+    if (toggleBtnMobile) {
+        toggleBtnMobile.checked = (currentAppLang === 'en');
+    }
+
     if (toggleBtn) {
         if (toggleBtn.type === 'checkbox') {
             toggleBtn.addEventListener('change', () => {
                 const newLang = toggleBtn.checked ? 'en' : 'id';
+                if (toggleBtnMobile) toggleBtnMobile.checked = toggleBtn.checked;
                 applyTranslations(newLang);
             });
         } else {
@@ -221,5 +229,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 applyTranslations(newLang);
             });
         }
+    }
+
+    // Mobile toggle listener
+    if (toggleBtnMobile) {
+        toggleBtnMobile.addEventListener('change', () => {
+            const newLang = toggleBtnMobile.checked ? 'en' : 'id';
+            if (toggleBtn) toggleBtn.checked = toggleBtnMobile.checked;
+            applyTranslations(newLang);
+        });
     }
 });

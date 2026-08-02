@@ -171,6 +171,17 @@ h1 span {
     font-weight: 300;
 }
 
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.table-responsive.glass-panel {
+    padding: 1rem; /* Adjust padding for mobile to save space */
+}
+
 .gradient-text {
     background: linear-gradient(to right, var(--primary), #34d399);
     -webkit-background-clip: text;
@@ -799,6 +810,47 @@ input:checked + .slider:before {
     margin-bottom: 1.5rem;
 }
 
+/* FAB Button */
+.fab-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 1.8rem;
+    border: none;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fab-btn:hover {
+    transform: scale(1.1);
+    background: var(--primary-hover);
+    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.6);
+}
+
+.fab-btn:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .fab-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
+    }
+}
+
 .knowledge-item h3 {
     margin-top: 0;
     margin-bottom: 1rem;
@@ -1366,6 +1418,13 @@ body {
     display: none;
 }
 
+.nav-divider.desktop-only {
+    display: block;
+    height: 28px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 0 8px;
+}
+
 .nav-logo-link.itera {
     background: rgba(30, 41, 59, 0.7);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -1417,17 +1476,129 @@ body {
     cursor: not-allowed;
 }
 
+/* Mobile controls: hidden on desktop */
+.nav-mobile-controls {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Desktop-only elements */
+.desktop-only {
+    display: flex;
+}
+
 @media (max-width: 768px) {
-    .top-navbar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-        position: relative; 
+    /* Hide desktop-only elements */
+    .desktop-only {
+        display: none !important;
     }
 
-    .nav-menu {
-        flex-wrap: wrap;
+    /* Show mobile controls */
+    .nav-mobile-controls {
+        display: flex;
+        flex-shrink: 0;
+    }
+
+    .hamburger-btn {
+        display: flex;
+        align-items: center;
         justify-content: center;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        color: white;
+        font-size: 1.3rem;
+        cursor: pointer;
+        padding: 8px 10px;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    .top-navbar {
+        padding: 10px 12px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+    }
+
+    .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0;
+    }
+
+    .nav-brand {
+        justify-content: flex-start;
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .nav-logo-link {
+        padding: 4px 8px;
+        height: auto;
+    }
+
+    .nav-logo-link img {
+        height: 24px;
+    }
+
+    /* Nav menu: dropdown on mobile */
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: rgba(15, 23, 42, 0.98);
+        padding: 0 15px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+
+        /* Smooth dropdown transition */
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        transform: translateY(-12px);
+        transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                    opacity 0.3s ease,
+                    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                    padding 0.35s ease;
+    }
+
+    .nav-menu.active {
+        display: flex;
+        max-height: 320px;
+        opacity: 1;
+        padding: 15px;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .nav-btn {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 15px;
+        font-size: 1rem;
+        border-radius: 12px;
+    }
+
+    .nav-lang-switch {
+        transform: scale(0.85);
+        transform-origin: center center;
     }
 }
 
@@ -1501,7 +1672,7 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.species-table tbody td {
+.species-table tbody td, .disease-table tbody td {
     padding: 1rem 1.2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     vertical-align: top;
@@ -1599,8 +1770,7 @@ body {
 }
 
 .about-text p {
-    font-size: 1rem;
-    color: #94a3b8;
+    color: var(--text-muted);
     line-height: 1.7;
     margin-bottom: 1rem;
 }
