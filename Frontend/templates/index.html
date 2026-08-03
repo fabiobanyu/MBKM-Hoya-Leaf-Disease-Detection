@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
 </head>
 <body>
 
@@ -72,7 +72,7 @@
             <p class="subtitle">AI-Powered Disease & Species Analysis for Hoya Plants</p>
             <div class="system-badge-container">
                 <span class="system-badge guard-badge"><i class="fa-solid fa-shield-halved"></i> Guard: <strong>MobileNetV3-Small</strong></span>
-                <span class="system-badge main-badge"><i class="fa-solid fa-brain"></i> Classifier: <strong>DenseNet121 + CBAM</strong></span>
+                <span class="system-badge main-badge"><i class="fa-solid fa-microchip"></i> Model Utama: <strong>ResNet50 + CBAM</strong></span>
             </div>
         </header>
 
@@ -134,12 +134,24 @@
                             <button class="crop-tool-btn" id="rotateRightBtn" title="Putar Kanan (+90°)"><i class="fa-solid fa-rotate-right"></i> Putar Kanan</button>
                             <button class="crop-tool-btn" id="flipHBtn" title="Cermin Horisontal"><i class="fa-solid fa-arrows-left-right"></i> Cermin H</button>
                             <button class="crop-tool-btn" id="flipVBtn" title="Cermin Vertikal"><i class="fa-solid fa-arrows-up-down"></i> Cermin V</button>
-                            <button class="crop-tool-btn" id="resetCropBtn" title="Reset Posisi"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                            <button class="crop-tool-btn" id="resetCropBtn" title="Reset Posisi & Background"><i class="fa-solid fa-arrow-rotate-left"></i> Reset</button>
+                        </div>
+
+                        <div class="rembg-loading" id="rembgLoading" style="display: none; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 16px; margin: 15px 0; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px; color: #34d399;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.2rem;"></i>
+                                <span data-i18n="rembg_loading_text">Menghapus background daun dengan AI...</span>
+                            </div>
+                            <div style="width: 100%; max-width: 280px; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 999px; overflow: hidden; margin-top: 4px;">
+                                <div id="rembgProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #6366f1); transition: width 0.15s ease;"></div>
+                            </div>
+                            <span id="rembgPercentText" style="font-weight: 700; font-size: 0.9rem; color: #6ee7b7;">0%</span>
                         </div>
 
                         <div class="preview-actions">
                             <button class="btn secondary-btn" id="removeBtn"><i class="fa-solid fa-xmark"></i> Remove</button>
                             <button class="btn primary-btn" id="analyzeBtn"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Image</button>
+                            <button class="btn rembg-action-btn" id="removeBgBtn" title="Hapus Background (Remove BG)"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="remove_bg_btn">Hapus Background</span></button>
                         </div>
                     </div>
                 </section>
@@ -297,6 +309,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
     <script src="{{ url_for('static', filename='tableData.js') }}"></script>
     <script src="{{ url_for('static', filename='i18n.js') }}"></script>
-    <script src="{{ url_for('static', filename='script.js') }}?v=5"></script>
+    <script src="{{ url_for('static', filename='script.js') }}?v=15"></script>
 </body>
 </html>

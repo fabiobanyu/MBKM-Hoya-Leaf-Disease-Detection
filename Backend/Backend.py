@@ -12,7 +12,7 @@ from neo4j import GraphDatabase
 
 from flask import Flask, request, jsonify, render_template
 from torchvision import transforms
-from pytorch_grad_cam import GradCAM
+from pytorch_grad_cam import GradCAM, GradCAMPlusPlus, EigenCAM, LayerCAM, ScoreCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from model_utils import build_model, DiseaseOnlyWrapper
@@ -54,20 +54,18 @@ except FileNotFoundError:
     species_names = []
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Loading model to {device}...")
-model = build_model(num_disease=len(class_names), num_species=len(species_names))
+print(f"Loading dual models to {device}...")
 
-MAIN_MODEL_PATH = os.path.join(ROOT_DIR, 'models/DenseNet-121 - Final Model.pth')
-if not os.path.exists(MAIN_MODEL_PATH):
-    MAIN_MODEL_PATH = os.path.join(ROOT_DIR, 'models/hoya_unified_densenet121.pth')
-
+# 1. ResNet50 + CBAM Model
+model_resnet = build_model('resnet50', num_disease=len(class_names), num_species=len(species_names))
+RESNET_MODEL_PATH = os.path.join(ROOT_DIR, 'models/hoya_multitask_resnet50_final.pth')
 try:
-    model.load_state_dict(torch.load(MAIN_MODEL_PATH, map_location=device), strict=False)
-    model.to(device)
-    model.eval()
-    print("Main DenseNet121 model loaded successfully.")
+    model_resnet.load_state_dict(torch.load(RESNET_MODEL_PATH, map_location=device), strict=False)
+    model_resnet.to(device)
+    model_resnet.eval()
+    print("Main ResNet50 model loaded successfully.")
 except Exception as e:
-    print(f"Error loading main model: {e}")
+    print(f"Error loading ResNet50 model: {e}")
 
 GUARD_MODEL_PATH = os.path.join(ROOT_DIR, 'models/MobileNetV3 Small - Guard Final Model.pth')
 guard_model = MiniCNNGuard(pretrained=False).to(device)
@@ -78,10 +76,38 @@ if os.path.exists(GUARD_MODEL_PATH):
 else:
     print(f"Warning: Mini-CNN Guard model not found at {GUARD_MODEL_PATH}")
 
-target_layers = [model.attention]
+resnet_wrapper = DiseaseOnlyWrapper(model_resnet)
+resnet_target_layers = [model_resnet.feature_extractor[-1]]
 
-cam_model = DiseaseOnlyWrapper(model)
-cam = GradCAM(model=cam_model, target_layers=target_layers)
+cam_methods_resnet = {
+    'gradcam': GradCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
+    'gradcam_pp': GradCAMPlusPlus(model=resnet_wrapper, target_layers=resnet_target_layers),
+    'eigencam': EigenCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
+    'scorecam': ScoreCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
+}
+
+
+def get_cbam_attention_map(model, input_tensor):
+    """Extract CBAM spatial attention map via forward hook."""
+    spatial_attn = {}
+    def hook_fn(module, inp, out):
+        with torch.no_grad():
+            x = inp[0]
+            avg_out_ch = model.attention.fc2(model.attention.relu(model.attention.fc1(F.adaptive_avg_pool2d(x, 1))))
+            max_out_ch = model.attention.fc2(model.attention.relu(model.attention.fc1(F.adaptive_max_pool2d(x, 1))))
+            channel_att = model.attention.sigmoid_channel(avg_out_ch + max_out_ch)
+            x_ch = x * channel_att
+            avg_s = torch.mean(x_ch, dim=1, keepdim=True)
+            max_s, _ = torch.max(x_ch, dim=1, keepdim=True)
+            spatial_attn['map'] = model.attention.sigmoid_spatial(
+                model.attention.conv_spatial(torch.cat([avg_s, max_s], dim=1))
+            )
+    handle = model.attention.register_forward_hook(hook_fn)
+    with torch.no_grad():
+        model(input_tensor)
+    handle.remove()
+    attn_map = spatial_attn['map'][0, 0].cpu().numpy()
+    return attn_map
 
 class AdaptiveSharpen:
     def __init__(self, blur_threshold=100.0, sharpen_strength=1.2):
@@ -137,9 +163,43 @@ eval_transform = transforms.Compose([
     transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),
 ])
 
+import rembg
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/remove-bg', methods=['POST'])
+def remove_bg():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    try:
+        input_image = Image.open(file.stream).convert('RGB')
+        
+        # Remove background using rembg (U2-Net)
+        output_rgba = rembg.remove(input_image)
+        
+        # Create white background version for clean AI classification & display
+        white_bg = Image.new("RGB", output_rgba.size, (255, 255, 255))
+        white_bg.paste(output_rgba, mask=output_rgba.split()[3])
+        
+        buffered = io.BytesIO()
+        white_bg.save(buffered, format="JPEG", quality=95)
+        img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        return jsonify({
+            'success': True,
+            'image': f"data:image/jpeg;base64,{img_b64}"
+        })
+    except Exception as e:
+        import traceback
+        print(f"Error in /remove-bg: {e}", flush=True)
+        traceback.print_exc()
+        return jsonify({'error': f"Gagal menghapus background: {str(e)}"}), 500
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -182,51 +242,66 @@ def predict():
                     'error_type': 'noise'
                 })
 
-            _, disease_out, species_out = model(input_tensor)
+            # 1. ResNet50 + CBAM Inference
+            _, disease_out_res, species_out_res = model_resnet(input_tensor)
+            conf_d_res_all = F.softmax(disease_out_res, 1)[0]
+            conf_s_res_all = F.softmax(species_out_res, 1)[0]
+            conf_d_res, pred_d_res = torch.max(conf_d_res_all, 0)
+            conf_s_res, pred_s_res = torch.max(conf_s_res_all, 0)
 
-            conf_d_all = F.softmax(disease_out, 1)[0]
-            conf_s_all = F.softmax(species_out, 1)[0]
+            disease_res = class_names[pred_d_res.item()]
+            species_res = species_names[pred_s_res.item()]
+            conf_d_res_pct = round(conf_d_res.item() * 100, 1)
+            conf_s_res_pct = round(conf_s_res.item() * 100, 1)
 
-            conf_d, pred_d = torch.max(conf_d_all, 0)
-            conf_s, pred_s = torch.max(conf_s_all, 0)
+            top3_d_res = torch.topk(conf_d_res_all, 3)
+            top3_diseases_res = [{'nama': class_names[i], 'confidence': round(v.item()*100, 2)} for v, i in zip(top3_d_res.values, top3_d_res.indices)]
 
-            pred_d_idx = pred_d.item()
-            pred_s_idx = pred_s.item()
-
-            disease_name = class_names[pred_d_idx]
-            species_name = species_names[pred_s_idx]
-
-            conf_d_pct = round(conf_d.item() * 100, 1)
-            conf_s_pct = round(conf_s.item() * 100, 1)
-
-            is_low_confidence = (conf_d.item() < 0.50 or conf_s.item() < 0.45)
-            if is_low_confidence:
-                pct_details = f" (Tingkat Kepastian AI: Penyakit {conf_d_pct}% < 50%, Spesies {conf_s_pct}% < 45%)."
-                return jsonify({
-                    'error': 'Sistem kesulitan mengenali daun Hoya ini secara pasti. Hal ini biasa terjadi akibat sudut pengambilan foto, pantulan cahaya, atau fokus crop yang kurang pas. Harap coba foto ulang lebih dekat dan terang.' + pct_details,
-                    'error_type': 'confidence'
-                })
-
-            top3_d = torch.topk(conf_d_all, 3)
-            top3_diseases = [{'nama': class_names[i], 'confidence': round(v.item()*100, 2)} for v, i in zip(top3_d.values, top3_d.indices)]
-
-        grayscale_cam = cam(input_tensor=input_tensor, targets=[ClassifierOutputTarget(pred_d_idx)])[0]
-
+        # Generate all heatmaps
         letterboxed_img = LetterboxPad(target_size=(IMG_SIZE, IMG_SIZE))(image)
         img_np = np.array(letterboxed_img, dtype=np.float32) / 255.0
-        cam_image = show_cam_on_image(img_np, grayscale_cam, use_rgb=True)
+        targets_res = [ClassifierOutputTarget(pred_d_res.item())]
 
-        cam_pil = Image.fromarray(cam_image)
-        buffered = io.BytesIO()
-        cam_pil.save(buffered, format="JPEG")
-        cam_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        # Calculate letterbox crop region (to remove black bars from output)
+        orig_w, orig_h = image.size
+        scale = min(IMG_SIZE / orig_w, IMG_SIZE / orig_h)
+        new_w, new_h = int(orig_w * scale), int(orig_h * scale)
+        pad_x = (IMG_SIZE - new_w) // 2
+        pad_y = (IMG_SIZE - new_h) // 2
+        crop_box = (pad_x, pad_y, pad_x + new_w, pad_y + new_h)
 
+        def overlay_and_crop(cam_map, img_np_base, crop_region):
+            """Generate heatmap overlay and crop out letterbox padding."""
+            overlay = show_cam_on_image(img_np_base, cam_map, use_rgb=True)
+            cropped = Image.fromarray(overlay).crop(crop_region)
+            buf = io.BytesIO()
+            cropped.save(buf, format="JPEG")
+            return base64.b64encode(buf.getvalue()).decode('utf-8')
+
+        # Generate ResNet50 Heatmaps (Grad-CAM, Grad-CAM++, Score-CAM, Eigen-CAM)
+        heatmaps_resnet = {}
+        method_labels = {
+            'gradcam': 'Grad-CAM',
+            'gradcam_pp': 'Grad-CAM++',
+            'scorecam': 'Score-CAM',
+            'eigencam': 'Eigen-CAM'
+        }
+        for method_key, cam_obj in cam_methods_resnet.items():
+            raw = cam_obj(input_tensor=input_tensor, targets=targets_res)[0]
+            heatmaps_resnet[method_key] = overlay_and_crop(raw, img_np, crop_box)
+
+        # Main ResNet heatmap is Grad-CAM++
+        cam_res_b64 = heatmaps_resnet['gradcam_pp']
+
+        # Original image (also cropped, no padding)
+        orig_cropped = letterboxed_img.crop(crop_box)
         original_buffered = io.BytesIO()
-        letterboxed_img.save(original_buffered, format="JPEG")
+        orig_cropped.save(original_buffered, format="JPEG")
         orig_b64 = base64.b64encode(original_buffered.getvalue()).decode('utf-8')
 
         knowledge_data = []
-        if neo4j_driver and disease_name.lower() != 'sehat':
+        target_disease_name = disease_res
+        if neo4j_driver and target_disease_name.lower() != 'sehat':
             try:
                 with neo4j_driver.session() as session:
                     query = """
@@ -240,9 +315,8 @@ def predict():
                            collect(DISTINCT {id: c.name_id, en: c.name_en}) AS causes,
                            collect(DISTINCT {id: t.name_id, en: t.name_en}) AS treatments
                     """
-                    result_records = session.run(query, category=disease_name)
+                    result_records = session.run(query, category=target_disease_name)
                     for record in result_records:
-
                         symptoms = [s for s in record["symptoms"] if s.get("id")]
                         causes = [c for c in record["causes"] if c.get("id")]
                         treatments = [t for t in record["treatments"] if t.get("id")]
@@ -261,26 +335,47 @@ def predict():
         result = {
             'success': True,
             'disease': {
-                'name': disease_name,
-                'confidence': round(conf_d.item() * 100, 2),
-                'top3': top3_diseases,
-                'status': 'sehat' if disease_name.lower() == 'sehat' else 'sakit'
+                'name': disease_res,
+                'confidence': conf_d_res_pct,
+                'top3': top3_diseases_res,
+                'status': 'sehat' if disease_res.lower() == 'sehat' else 'sakit'
             },
             'species': {
-                'name': species_name,
-                'confidence': round(conf_s.item() * 100, 2)
+                'name': species_res,
+                'confidence': conf_s_res_pct
             },
             'images': {
                 'original': f"data:image/jpeg;base64,{orig_b64}",
-                'gradcam': f"data:image/jpeg;base64,{cam_b64}"
+                'gradcam': f"data:image/jpeg;base64,{cam_res_b64}"
             },
+            'models': {
+                'resnet50': {
+                    'name': 'ResNet50 + CBAM',
+                    'disease': {
+                        'name': disease_res,
+                        'confidence': conf_d_res_pct,
+                        'top3': top3_diseases_res,
+                        'status': 'sehat' if disease_res.lower() == 'sehat' else 'sakit'
+                    },
+                    'species': {
+                        'name': species_res,
+                        'confidence': conf_s_res_pct
+                    },
+                    'gradcam': f"data:image/jpeg;base64,{cam_res_b64}"
+                }
+            },
+            'heatmap_methods': {k: {'label': method_labels[k], 'image': f"data:image/jpeg;base64,{v}"} for k, v in heatmaps_resnet.items()},
             'knowledge': knowledge_data
         }
 
         return jsonify(result)
 
     except Exception as e:
+        import traceback
+        print(f"Error in /predict: {e}", flush=True)
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    print("Starting Flask App on port 5000...", flush=True)
+    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5000)

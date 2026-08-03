@@ -1,0 +1,35 @@
+{
+  "class_names": [
+    "Sehat",
+    "Bercak Cokelat",
+    "Bercak Putih",
+    "Daun Layu",
+    "Bercak Bintik Hitam"
+  ],
+  "species_names": [
+    "Hoya Macrophylla",
+    "Hoya Wayeti",
+    "Hoya australis",
+    "Hoya callistophylla",
+    "Hoya finlaysonii",
+    "Hoya imperialis",
+    "Hoya kerrii",
+    "Hoya lacunosa",
+    "Hoya pubicalyx",
+    "hoya carnosa"
+  ],
+  "img_size": 224,
+  "normalize_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalize_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "temperature": 1.326417326927185,
+  "backbone": "resnet50",
+  "gate_threshold": 0.5
+}

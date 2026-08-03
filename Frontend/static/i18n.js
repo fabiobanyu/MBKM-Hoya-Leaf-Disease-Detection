@@ -43,7 +43,9 @@ const translations = {
         cat_bercak_cokelat: 'Bercak Cokelat',
         cat_bercak_putih: 'Bercak Putih',
         cat_daun_layu: 'Daun Layu',
-        cat_bercak_bintik_hitam: 'Bercak Bintik Hitam'
+        cat_bercak_bintik_hitam: 'Bercak Bintik Hitam',
+        remove_bg_btn: 'Hapus Background',
+        rembg_loading_text: 'Menghapus background daun dengan AI...'
     },
     en: {
         nav_home: 'Home',

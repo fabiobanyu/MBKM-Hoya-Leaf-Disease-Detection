@@ -49,21 +49,27 @@ class MultiTaskHoyaModel(nn.Module):
         feat_map = self.feature_extractor(x)
         
         # Gate path (uses raw backbone features before attention)
-        raw_feat = F.relu(feat_map, inplace=True)
+        raw_feat = F.relu(feat_map, inplace=False)
         raw_feat_pooled = F.adaptive_avg_pool2d(raw_feat, (1, 1)).view(raw_feat.size(0), -1)
         gate_out = self.gate_head(raw_feat_pooled)
         
         # Disease / Species path
         feat_map_att = self.attention(feat_map) 
-        feat_att = F.relu(feat_map_att, inplace=True)
+        feat_att = F.relu(feat_map_att, inplace=False)
         feat_att_pooled = F.adaptive_avg_pool2d(feat_att, (1, 1)).view(feat_att.size(0), -1)
         
         return gate_out, self.disease_head(feat_att_pooled), self.species_head(feat_att_pooled)
 
-def build_model(num_disease=5, num_species=10, dropout=0.40):
-    base = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
-    in_features = base.classifier.in_features
-    feature_extractor = base.features
+def build_model(arch='resnet50', num_disease=5, num_species=10, dropout=0.40):
+    if arch.lower() == 'densenet121':
+        base = models.densenet121(weights=None)
+        in_features = base.classifier.in_features
+        feature_extractor = base.features
+    else:
+        base = models.resnet50(weights=None)
+        in_features = base.fc.in_features
+        feature_extractor = nn.Sequential(*list(base.children())[:-2])
+        
     model = MultiTaskHoyaModel(feature_extractor, in_features, num_disease, num_species, dropout)
     return model
 

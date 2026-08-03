@@ -63,6 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const historyContainer = document.getElementById('historyContainer');
 
     let currentFile = null;
+    let originalFile = null;
+    let originalDataUrl = null;
+    let isBgRemoved = false;
     let cropper = null;
     let currentKnowledge = [];
 
@@ -423,8 +426,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         currentFile = file;
+        originalFile = file;
+        isBgRemoved = false;
         const reader = new FileReader();
         reader.onload = (e) => {
+            originalDataUrl = e.target.result;
 
             imagePreview.onload = () => {
                 if (cropper) {
@@ -619,11 +625,163 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (resetCropBtn) {
         resetCropBtn.addEventListener('click', () => {
-            if (cropper) {
-                flipHState = 1;
-                flipVState = 1;
+            flipHState = 1;
+            flipVState = 1;
+
+            if (isBgRemoved && originalDataUrl && originalFile) {
+                currentFile = originalFile;
+                isBgRemoved = false;
+
+                if (cropper) {
+                    try { cropper.destroy(); } catch (e) {}
+                }
+
+                if (previewFrame) {
+                    previewFrame.classList.remove('slide-left-anim');
+                    void previewFrame.offsetWidth;
+                    previewFrame.classList.add('slide-left-anim');
+                }
+
+                imagePreview.onload = () => {
+                    cropper = new Cropper(imagePreview, {
+                        viewMode: 1,
+                        dragMode: 'move',
+                        autoCropArea: 0.8,
+                        background: false,
+                        responsive: true,
+                        guides: true,
+                        center: true,
+                        highlight: true,
+                        zoomable: true,
+                        minContainerHeight: 300,
+                        ready() {
+                            attachTopRotateHandle(this.cropper);
+                        },
+                        crop() {
+                            attachTopRotateHandle(this.cropper);
+                        }
+                    });
+                };
+                imagePreview.src = originalDataUrl;
+            } else if (cropper) {
                 cropper.reset();
             }
+        });
+    }
+
+    const removeBgBtn = document.getElementById('removeBgBtn');
+    const rembgLoading = document.getElementById('rembgLoading');
+    const previewFrame = document.querySelector('.preview-image-frame');
+    if (removeBgBtn) {
+        removeBgBtn.addEventListener('click', () => {
+            if (!cropper) return;
+
+            removeBgBtn.disabled = true;
+            if (rembgLoading) {
+                rembgLoading.classList.remove('hidden');
+                rembgLoading.style.display = 'flex';
+            }
+
+            const progressBar = document.getElementById('rembgProgressBar');
+            const percentText = document.getElementById('rembgPercentText');
+            let currentPct = 0;
+
+            if (progressBar) progressBar.style.width = '0%';
+            if (percentText) percentText.textContent = '0%';
+
+            const progressInterval = setInterval(() => {
+                if (currentPct < 90) {
+                    currentPct += Math.floor(Math.random() * 12) + 8;
+                    if (currentPct > 90) currentPct = 90;
+                    if (progressBar) progressBar.style.width = `${currentPct}%`;
+                    if (percentText) percentText.textContent = `${currentPct}%`;
+                }
+            }, 180);
+
+            const canvas = cropper.getCroppedCanvas({
+                maxWidth: 1024,
+                maxHeight: 1024,
+                fillColor: '#ffffff'
+            });
+
+            if (!canvas) {
+                clearInterval(progressInterval);
+                removeBgBtn.disabled = false;
+                if (rembgLoading) rembgLoading.style.display = 'none';
+                return;
+            }
+
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    clearInterval(progressInterval);
+                    removeBgBtn.disabled = false;
+                    if (rembgLoading) rembgLoading.style.display = 'none';
+                    return;
+                }
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', blob, 'crop_image.jpg');
+
+                    const response = await fetch('/remove-bg', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (!data.success) {
+                        throw new Error(data.error || "Gagal menghapus background.");
+                    }
+
+                    const resBlob = await (await fetch(data.image)).blob();
+                    currentFile = new File([resBlob], "leaf_nobg.jpg", { type: "image/jpeg" });
+                    isBgRemoved = true;
+
+                    if (cropper) {
+                        try { cropper.destroy(); } catch (e) {}
+                    }
+
+                    if (previewFrame) {
+                        previewFrame.classList.remove('slide-left-anim');
+                        void previewFrame.offsetWidth;
+                        previewFrame.classList.add('slide-left-anim');
+                    }
+
+                    imagePreview.onload = () => {
+                        cropper = new Cropper(imagePreview, {
+                            viewMode: 1,
+                            dragMode: 'move',
+                            autoCropArea: 0.95,
+                            background: false,
+                            responsive: true,
+                            guides: true,
+                            center: true,
+                            highlight: true,
+                            zoomable: true,
+                            minContainerHeight: 300,
+                            ready() {
+                                attachTopRotateHandle(this.cropper);
+                            },
+                            crop() {
+                                attachTopRotateHandle(this.cropper);
+                            }
+                        });
+                    };
+                    imagePreview.src = data.image;
+
+                } catch (err) {
+                    console.error("Remove BG error:", err);
+                    showErrorBanner(err.message || "Gagal menghapus background.", "noise");
+                } finally {
+                    clearInterval(progressInterval);
+                    if (progressBar) progressBar.style.width = '100%';
+                    if (percentText) percentText.textContent = '100%';
+                    setTimeout(() => {
+                        removeBgBtn.disabled = false;
+                        if (rembgLoading) rembgLoading.style.display = 'none';
+                    }, 300);
+                }
+            }, 'image/jpeg', 0.95);
         });
     }
 
@@ -727,6 +885,56 @@ document.addEventListener('DOMContentLoaded', () => {
             statusIcon.innerHTML = '<i class="fa-solid fa-check-circle"></i>';
         }
 
+        // Render Explainability Analysis for ResNet50
+        if (data.heatmap_methods) {
+            let heatmapGrid = document.getElementById('heatmapMethodsGrid');
+            if (!heatmapGrid) {
+                heatmapGrid = document.createElement('div');
+                heatmapGrid.id = 'heatmapMethodsGrid';
+                heatmapGrid.className = 'glass-panel mt-4';
+                heatmapGrid.style.cssText = 'padding: 24px; border-radius: 18px; margin-top: 20px;';
+                const compContainer = document.querySelector('.results-grid');
+                if (compContainer) compContainer.parentNode.insertBefore(heatmapGrid, compContainer.nextSibling);
+            }
+
+            const methods = data.heatmap_methods;
+            const methodKeys = Object.keys(methods);
+
+            let cardsHtml = methodKeys.map(key => {
+                const m = methods[key];
+                const colorMap = {
+                    'gradcam': '#f59e0b',
+                    'gradcam_pp': '#10b981',
+                    'scorecam': '#ec4899',
+                    'eigencam': '#6366f1'
+                };
+                const color = colorMap[key] || '#8b5cf6';
+                return `
+                    <div style="border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); transition: transform 0.2s, box-shadow 0.2s;" onmouseenter="this.style.transform='scale(1.02)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.3)'" onmouseleave="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+                        <div style="padding: 10px 14px; background: rgba(255,255,255,0.05); border-bottom: 2px solid ${color};">
+                            <span style="font-weight: 700; font-size: 0.85rem; color: ${color};">${m.label}</span>
+                        </div>
+                        <img src="${m.image}" style="width: 100%; display: block;" alt="${m.label}">
+                    </div>
+                `;
+            }).join('');
+
+            heatmapGrid.innerHTML = `
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h3 style="font-size: 1.3rem; color: var(--text-main); margin-bottom: 8px;">
+                        <i class="fa-solid fa-microscope text-gradient"></i> Evaluasi Explainable AI (XAI) pada ResNet50
+                    </h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); display: inline-block; background: rgba(16, 185, 129, 0.1); padding: 6px 16px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <i class="fa-solid fa-check-circle" style="color: #10b981;"></i> <strong>Model Utama:</strong> ResNet50 + CBAM | <strong>Confidence:</strong> ${data.disease.confidence}%
+                    </p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                    ${cardsHtml}
+                </div>
+            `;
+        }
+
+
         const topPredictions = document.getElementById('topPredictions');
         topPredictions.innerHTML = '';
         data.disease.top3.forEach((pred, index) => {
@@ -807,7 +1015,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    newAnalysisBtn.addEventListener('click', () => resetToHome(false));
+    newAnalysisBtn.addEventListener('click', () => {
+        // Clean up existing cropper
+        if (cropper) {
+            try { cropper.destroy(); } catch(e) {}
+            cropper = null;
+        }
+        currentFile = null;
+        isBgRemoved = false;
+
+        // Remove dynamically created comparison containers
+        const compEl = document.getElementById('modelComparisonContainer');
+        if (compEl) compEl.remove();
+        const heatmapEl = document.getElementById('heatmapMethodsGrid');
+        if (heatmapEl) heatmapEl.remove();
+
+        // Instantly hide results-related sections
+        [resultsSection, knowledgeSection, loadingSection, previewArea].forEach(el => {
+            if (el) { el.classList.add('hidden'); el.style.animation = ''; }
+        });
+
+        // Show the upload panel so fileInput.click() works properly
+        if (uploadPanel) { uploadPanel.classList.remove('hidden'); uploadPanel.style.animation = ''; }
+        const toShow = isCameraMode ? cameraZone : dropZone;
+        if (toShow) { toShow.classList.remove('hidden'); toShow.style.animation = ''; }
+
+        // Reset confidence bar
+        const diseaseConfidenceBar = document.getElementById('diseaseConfidenceBar');
+        if (diseaseConfidenceBar) diseaseConfidenceBar.style.width = '0%';
+
+        // Trigger file picker
+        fileInput.click();
+    });
 
     if (retryCropBtn) {
         retryCropBtn.addEventListener('click', () => {

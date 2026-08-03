@@ -45,7 +45,7 @@ Sistem ini dikembangkan secara kolaboratif oleh tim riset mahasiswa dari Institu
 Sistem ini dibangun secara menyeluruh *(Full-Stack)* dengan perpaduan teknologi berikut:
 
 ### 🐍 Backend & AI (Python)
-- **PyTorch & Torchvision:** Core *framework* untuk membangun dan melatih arsitektur *Deep Learning* (MobileNetV3 & DenseNet-121).
+- **PyTorch & Torchvision:** Core *framework* untuk membangun dan melatih arsitektur *Deep Learning* (MobileNetV3 & ResNet50).
 - **Flask:** *Web framework* Python yang ringan untuk melayani REST API dan *routing* aplikasi.
 - **OpenCV & NumPy:** Pemrosesan manipulasi citra *(image processing)* tingkat lanjut.
 - **Grad-CAM:** Algoritma untuk *Explainable AI* yang memetakan aktivasi *layer* konvolusional menjadi visualisasi *Heatmap*.
@@ -71,7 +71,7 @@ graph TD
     
     C --> D{"Guard Model (MobileNetV3)"}
     D -- "Bukan Daun Hoya" --> E["Tolak Gambar"]
-    D -- "Validasi Berhasil" --> F["Main Classifier (DenseNet-121)"]
+    D -- "Validasi Berhasil" --> F["Main Classifier (ResNet50)"]
     
     F --> G1("Prediksi Penyakit")
     F --> G2("Prediksi Spesies")
@@ -86,7 +86,7 @@ graph TD
 
 ### 🧠 Penjelasan Model:
 - **MobileNetV3-Small:** Model pendahulu yang bertindak sebagai gerbang validasi karena sifatnya yang super ringan dan cepat.
-- **DenseNet-121 + CBAM:** *Convolutional Block Attention Module* (CBAM) ditambahkan pada arsitektur DenseNet agar AI dapat memusatkan "perhatiannya" pada pola tekstur bercak penyakit yang krusial.
+- **ResNet50 + CBAM:** *Convolutional Block Attention Module* (CBAM) ditambahkan pada arsitektur ResNet50 agar AI dapat memusatkan "perhatiannya" pada pola tekstur bercak penyakit yang krusial.
 
 ---
 
