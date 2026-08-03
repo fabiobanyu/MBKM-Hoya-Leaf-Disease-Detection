@@ -12,7 +12,7 @@ from neo4j import GraphDatabase
 
 from flask import Flask, request, jsonify, render_template
 from torchvision import transforms
-from pytorch_grad_cam import GradCAM, GradCAMPlusPlus, EigenCAM, LayerCAM, ScoreCAM
+from pytorch_grad_cam import GradCAM, GradCAMPlusPlus, EigenCAM, LayerCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
 from model_utils import build_model, DiseaseOnlyWrapper
@@ -83,7 +83,7 @@ cam_methods_resnet = {
     'gradcam': GradCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
     'gradcam_pp': GradCAMPlusPlus(model=resnet_wrapper, target_layers=resnet_target_layers),
     'eigencam': EigenCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
-    'scorecam': ScoreCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
+    'layercam': LayerCAM(model=resnet_wrapper, target_layers=resnet_target_layers),
 }
 
 
@@ -283,7 +283,7 @@ def predict():
         method_labels = {
             'gradcam': 'Grad-CAM',
             'gradcam_pp': 'Grad-CAM++',
-            'scorecam': 'Score-CAM',
+            'layercam': 'Layer-CAM',
             'eigencam': 'Eigen-CAM'
         }
         for method_key, cam_obj in cam_methods_resnet.items():
