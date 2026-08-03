@@ -199,7 +199,12 @@ function renderDynamicTables(lang) {
         speciesTableBody.innerHTML = TABLE_DATA.species.map(s => `
             <tr>
                 <td>${s.no}</td>
-                <td><strong>${s.name}</strong></td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <img src="/static/species_img/${s.no}.jpg" alt="${s.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.1);">
+                        <strong>${s.name}</strong>
+                    </div>
+                </td>
                 <td><span class="badge ${s.cat_class}">${lang === 'en' ? s.cat_en : s.cat_id}</span></td>
                 <td>${lang === 'en' ? s.desc_en : s.desc_id}</td>
             </tr>
