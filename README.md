@@ -10,12 +10,12 @@
     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"></a>
   </p>
   
-  <i>Proyek Riset Kolaboratif MBKM (Merdeka Belajar Kampus Merdeka) — BRIN & ITERA</i>
+  <i>Proyek Riset Kolaboratif — BRIN & ITERA</i>
 </div>
 
 ---
 
-## 👥 Tim Peneliti & Pengembang (MBKM)
+## 👥 Tim Peneliti & Pengembang
 
 Sistem ini dikembangkan secara kolaboratif oleh tim riset mahasiswa dari Institut Teknologi Sumatera (ITERA) di bawah bimbingan Badan Riset dan Inovasi Nasional (BRIN):
 
@@ -104,8 +104,8 @@ Kami telah menyediakan dataset gabungan (gambar daun Hoya sehat dan berpenyakit)
 
 1. **Kloning repositori ini:**
    ```bash
-   git clone https://github.com/fabiobanyu/MBKM-Hoya-Leaf-Disease-Detection.git
-   cd MBKM-Hoya-Leaf-Disease-Detection
+   git clone https://github.com/fabiobanyu/Hoya-Leaf-Disease-Detection.git
+   cd Hoya-Leaf-Disease-Detection
    ```
 2. **Install dependensi library Python:**
    ```bash
